@@ -1,0 +1,189 @@
+{
+  "auth": {
+    "wrongCode": "کد وارد شده اشتباه است.",
+    "wrongPassword": "رمز عبور اشتباه است.",
+    "expiredCode": "کد وارد شده منقضی شده است.",
+    "newUniquePassword": "رمز عبور جدید نمی‌تواند با رمز عبور قدیمی یکسان باشد.",
+    "otpTimeout": "باید {remainingTime} ثانیه صبر کنید تا دوباره امتحان کنید."
+  },
+  "user": {
+    "notFound": "کاربر یافت نشد.",
+    "userExists": "کاربری با این شماره تلفن وجود دارد.",
+    "uniqueField": "فیلدهای زیر تکراری هستند: {field}.",
+    "cantChangeRole": "شما نمی‌توانید نقش این کاربر را تغییر دهید.",
+    "paymentRequired": "تراکنش درخواست شده بیش از موجودی شما است. لطفاً {value} وجه به حساب خود اضافه کنید.",
+    "birthDateIsRequired": "فیلد تاریخ تولد اجباری است.",
+    "cardAlreadyRegistered": "این کارت قبلاً ثبت شده است.",
+    "notVerified": "کاربر تایید نشده است.",
+    "alreadyVerified": "اکانت شما قبلا تایید شده یا درخواست تایید داده است.",
+    "referralCodeNotFound": "کد دعوت وارد شده اشتباه است.",
+    "sameMobileNumber": "َشماره موبایل جدید نمی تواند با شماره قبل یکسان باشد.",
+    "firstLevelVerifyRequired": "شما باید اول احراز هویت مرحله مرحله اول را انجام داده باشید.",
+    "docImageIsNotValid": "سند وارد شده قابل قبول نیست.",
+    "isNotActive": "این یوزر توسط ادمین غیرفعال شده است. برای اطلاعات بیشتر با پشتیبانی تماس بگیرید.",
+    "cannotDeleteUser": "این یوزر را نمی توانید حذف کنید."
+  },
+  "card": {
+    "notFound": "کارت یافت نشد.",
+    "uniqueField": "فیلدهای زیر تکراری هستند: {field}."
+  },
+  "transaction": {
+    "lessThanMinTradeableAmount": "مقدار درخواست شده باید بیشتر از {value} باشد.",
+    "notFound": "تراکنش یافت نشد.",
+    "cantChangeStatus": "نمی‌توان وضعیت تراکنش را به وضعیت خواسته شده تغییر داد.",
+    "lessThanTradeLimit": "بر اساس محدودیت های سطح کاربری شما، تراکنش شما باید بیشتر از {value} باشد.",
+    "moreThanTradeLimit": "بر اساس محدودیت های سطح کاربری شما، تراکنش شما باید کمتر از {value} باشد.",
+    "reportTimeConflict": "تاریخ پایان باید بعد از تاریخ شروع باشد.",
+    "payLaterLimit": "تراکنش های قرضی شما از سقف مجاز عبور کرده است. برای ادامه، ابتدا تراکنش های قبلی تان را تسویه کنید.",
+    "moreThanMaxDecimalPlaces": "تعداد ارقام اعشار باید کمتر و یا مساوی {value} باشد.",
+    "notPaidYet": "مبلغ این تراکنش هنوز توسط کاربر پرداخت نشده است.",
+    "priceCannotBeEmpty": "فیلد قیمت نمی تواند خالی باشد.",
+    "fixedPriceTransactionsAreNotAllowed": "تراکنش های با قیمت ثابت مجاز نیست.",
+    "priceMismatch": "قیمت تغییر کرده است، لطفا دوباره تراکنش را انجام دهید.",
+    "payLaterBuyNotAllowed": "تراکنش های قرضی مجاز نیست."
+  },
+  "product": {
+    "notFound": "محصول یافت نشد.",
+    "uniqueField": "فیلدهای زیر تکراری هستند: {field}",
+    "quantitativeWithoutWeight": "وزن محصول کمی نمی‌تواند 0 باشد.",
+    "emptyMinDeliverableAmount": "فیلد minDeliverableAmount نمی تواند خالی باشد",
+    "cantDelete": "درخواست شما امکان پذیر نیست. درخواستی برای تحویل فیزیکی این محصول ثبت شده است.",
+    "outOfStock": "متاسفانه مقدار درخواستی بیشتر از موجودی است. لطفاً مقدار درخواستی را کاهش دهید یا با پشتیبانی تماس بگیرید.",
+    "groupUniqueField": "فیلدهای زیر تکراری هستند: {field}",
+    "groupNotFound": "گروه محصول یافت نشد.",
+    "cantDeleteGroup": "درخواست شما امکان پذیر نیست. حداقل یک محصول دراین گروه وجود دارد، لطفا ابتدا آنها را حذف کنید.",
+    "alreadyHasAGroup": "درخواست شما امکان پذیر نیست. این محصول در گروه دیگری است."
+  },
+  "productRequest": {
+    "notFound": "درخواست محصول یافت نشد.",
+    "lessThanMinDeliverable": "مقدار درخواست شده باید بیشتر از {value} باشد.",
+    "cantChangeStatus": "نمی‌توان وضعیت درخواست محصول را به وضعیت خواسته شده تغییر داد.",
+    "moreThanMaxDecimalPlaces": "تعداد ارقام اعشار باید کمتر و یا مساوی {value} باشد."
+  },
+  "factor": {
+    "notFound": "فاکتور یافت نشد."
+  },
+  "balanceTransaction": {
+    "notFound": "تراکنش یافت نشد.",
+    "cantUpdateStatus": "این تراکنش نمی‌تواند به‌روزرسانی شود.",
+    "lessThanMinDepositAmount": "مقدار سپرده درخواست شده نباید کمتر از {value} باشد.",
+    "lessThanMinWithdrawAmount": "مقدار برداشت درخواست شده نباید کمتر از {value} باشد.",
+    "gatewayIsDisabled": "این درگاه در حال حاضر غیرفعال است.",
+    "userHasNoRegisteredCard": "شما هیچ کارت ثبت شده ای ندارید."
+  },
+  "externalApis": {
+    "sourceBankIsNotActive": "بانک منبع فعال نیست.",
+    "providerIsNotActive": "ارائه دهنده کارت فعال نیست.",
+    "blackListed": "استعلام این کارت ممکن نیست.",
+    "notValid": "کارت معتبر نیست.",
+    "notActive": "کارت فعال نیست.",
+    "isExpired": "کارت منقضی شده است.",
+    "registeredAsLost": "کارت به عنوان مفقود شده ثبت شده است.",
+    "registeredAsStolen": "کارت به عنوان سرقت شده ثبت شده است.",
+    "accountNumberNotValid": "شماره حساب معتبر نیست.",
+    "ownerNotAuthorized": "هویت مالک کارت معتبر نیست.",
+    "naCodeAndCardNotMatch": "کد ملی با شماره کارت مطابقت ندارد.",
+    "ibanNotFound": "شبا یافت نشد.",
+    "ibanNotValid": "شبا معتبر نیست.",
+    "ibanOwnerNotFound": "مالک شبا معتبر نیست.",
+    "cardTypeNotSupported": "نوع کارت پشتیبانی نمی‌شود.",
+    "nationalCodeNotValid": "کد ملی معتبر نیست.",
+    "mobileNumberNotValid": "شماره موبایل معتبر نیست.",
+    "naCodeAndMobileNotMatch": "کد ملی با شماره موبایل مطابقت ندارد.",
+    "identityNotFound": "اطلاعات هویتی یافت نشد.",
+    "nationalCodeBlackListed": "استعلام این کدملی امکان پذیر نیست."
+  },
+  "settings": {
+    "timeConflict": "تداخل زمان در قانون {ruleNumber}. زمان شروع باید قبل از زمان پایان باشد."
+  },
+  "discount": {
+    "uniqueField": "فیلدهای زیر تکراری هستند: {field}.",
+    "notFound": "تخفیف یافت نشد.",
+    "used": "کد تخفیف قبلا استفاده شده است.",
+    "amountIsNotValid": "مقدار وارد شده صحیح نیست.",
+    "expired": "کد تخفیف منقضی شده است.",
+    "notValidForProduct": "کد تخفیف برای این محصول معتبر نیست."
+  },
+  "level": {
+    "notFound": "سطح یافت نشد.",
+    "uniqueField": "فیلدهای زیر تکراری هستند: {field}.",
+    "cannotDeleteLevelOne": "سطح 1 نمی تواند حذف شود.",
+    "cannotDelete": "درخواست شما امکان پذیر نیست. حداقل یک کاربر با این سطح در سیستم وجود دارد."
+  },
+  "withdrawLimit": {
+    "notFound": "محدودیت یافت نشد.",
+    "moreThanLimit": "میزان برداشت شما در این بازه زمانی بیشتر از حد مجاز است.",
+    "timeConflict": "زمان شروع باید قبل از زمان پایان باشد."
+  },
+  "message": {
+    "notFound": "پیام یافت نشد."
+  },
+  "ticket": {
+    "notFound": "تیکت یافت نشد.",
+    "notActive": "این تیکت بسته شده است."
+  },
+  "tradeLimit": {
+    "notFound": "محدودیت یافت نشد.",
+    "moreThanLimit": "میزان تراکنش شما در این بازه زمانی بیشتر از حد مجاز است.",
+    "timeConflict": "زمان شروع باید قبل از زمان پایان باشد.",
+    "timeDifference": "زمان شروع و پایان باید حداکثر 24 ساعت اختلاف داشته باشند."
+  },
+  "tradeable": {
+    "notFound": "کالای قابل معامله یافت نشد.",
+    "uniqueField": "فیلدهای زیر تکراری هستند: {field}.",
+    "cantDelete": "درخواست شما امکان پذیر نیست. محصول یا تراکنشی برای این کالای قابل معامله ثبت شده است.",
+    "badPriceApi": "مقادیر ارائه شده برای گرفتن قیمت، به یک عدد معتبر منجر نشدند.",
+    "notEnoughUserInventory": "تراکنش درخواست شده بیش از موجودی کاربر است.",
+    "outOfStock": "متاسفانه مقدار درخواستی بیشتر از موجودی است. لطفاً مقدار درخواستی را کاهش دهید یا با پشتیبانی تماس بگیرید."
+  },
+  "userInventory": {
+    "notFound": "دارایی کاربر یافت نشد."
+  },
+  "orderBook": {
+    "orderNotFound": "سفارش یافت نشد.",
+    "cannotCancelOrder": "این سفارش را نمی توان کنسل کرد.",
+    "priceCannotBeEmpty": "فیلد price نمی تواند خالی باشد",
+    "amountCannotBeEmpty": "فیلد amount نمی تواند خالی باشد",
+    "totalCannotBeEmpty": "فیلد total نمی تواند خالی باشد",
+    "orderBookSettingsUniqueField": "فیلدهای زیر تکراری هستند: {field}.",
+    "orderBookSettingsNotFound": "تنظیمات یافت نشد.",
+    "orderingDisabled": "سفارش گذاری برای شما غیرفعال است."
+  },
+  "giftCard": {
+    "notFound": "گیفت کارت یافت نشد.",
+    "cantChangeStatus": "نمی‌توان وضعیت گیفت کارت را به وضعیت خواسته شده تغییر داد.",
+    "used": "این گیفت کارت قبلا استفاده شده است.",
+    "lessThanMinWeight": "مقدار درخواست شده باید مضربی از {value} باشد.",
+    "settingsUniqueField": "فیلدهای زیر تکراری هستند: {field}.",
+    "settingsNotFound": "تنظیمات یافت نشد.",
+    "cannotDelete": "فقط گیفت کارت های در انتظار را می توان حذف کرد.",
+    "invalidWeight": "مقادیر قابل قبول باید یکی از این موارد باشد:[{value}]",
+    "invalidDeliveryType": "نوع تحویل معتبر نیست."
+  },
+  "branch": {
+    "notFound": "شعبه یافت نشد.",
+    "branchTimeNotFound": "زمان یافت نشد.",
+    "cantDelete": "درخواست شما امکان پذیر نیست. زمانی در تقویم برای این شعبه ثبت شده است.",
+    "cantDeleteBranchTime": "درخواست شما امکان پذیر نیست. درخواستی برای تحویل فیزیکی برای این زمان ثبت شده است.",
+    "branchTimeHasNoCapacity": "ظرفیت زمان انتخاب شده برای شعبه پر شده است، لطفا زمان دیگری انتخاب کنید.",
+    "branchTimeTimeConflict": "زمان شروع باید قبل از زمان پایان باشد."
+  },
+  "transfer": {
+    "notFound": "درخواست انتقال یافت نشد.",
+    "moreThanMaxDecimalPlaces": "تعداد ارقام اعشار باید کمتر و یا مساوی {value} باشد.",
+    "cantChangeStatus": "وضعیت درخواست انتقال نمی‌تواند تغییر کند.",
+    "expiredCode": "کد وارد شده منقضی شده است.",
+    "wrongCode": "کد وارد شده اشتباه است."
+  },
+  "stake": {
+    "planNotFound": "پلن سرمایه گذاری یافت نشد.",
+    "planNotActive": "این پلن سرمایه گذاری فعال نیست.",
+    "planHasStakes": "این پلن سرمایه گذاری دارای سرمایه گذاری هست و نمی تواند حذف شود.",
+    "stakeNotFound": "سرمایه گذاری یافت نشد.",
+    "stakeNotActive": "این سرمایه گذاری فعال نیست."
+  },
+  "userFee": {
+    "notFound": "کارمزد کاربر یافت نشد.",
+    "alreadyExists": "کارمزد کاربر قبلا ثبت شده است."
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "auth": {
+    "wrongCode": "Entered code is wrong.",
+    "wrongPassword": "password is wrong.",
+    "expiredCode": "Entered code is expired.",
+    "newUniquePassword": "New password cant be same as the old password.",
+    "otpTimeout": "You should wait {remainingTime}s to try again."
+  },
+  "user": {
+    "notFound": "User not found.",
+    "userExists": "User with this mobile number already exists.",
+    "uniqueField": "Following field are duplicated: {field}.",
+    "cantChangeRole": "You cant change this user role.",
+    "paymentRequired": "The requested transaction exceeds your available balance. Please add {value} funds to your account.",
+    "birthDateIsRequired": "BirthDate field is required.",
+    "cardAlreadyRegistered": "This card is already registered.",
+    "notVerified": "User is not verified.",
+    "alreadyVerified": "Your account is already verified or requested to get verified.",
+    "referralCodeNotFound": "Entered referral code is wrong.",
+    "sameMobileNumber": "New mobile number cant be same as the old mobile number.",
+    "firstLevelVerifyRequired": "You must first complete the first step of the authentication process.",
+    "docImageIsNotValid": "The submitted document is not acceptable.",
+    "isNotActive": "This user has been deactivated by the admin. For more information, please contact support.",
+    "cannotDeleteUser": "You cannot delete this user."
+  },
+  "card": {
+    "notFound": "Card not found.",
+    "uniqueField": "Following field are duplicated: {field}."
+  },
+  "transaction": {
+    "lessThanMinTradeableAmount": "The requested amount must be more than {value}.",
+    "notFound": "Transaction not found.",
+    "cantChangeStatus": "Cannot change transaction status to requested one.",
+    "lessThanTradeLimit": "Based on your user level restrictions, your transaction must be greater than {value}.",
+    "moreThanTradeLimit": "Based on your user level restrictions, your transaction must be less than {value}.",
+    "reportTimeConflict": "The end date must be after the start date.",
+    "payLaterLimit": "Your margin transactions have exceeded the allowed limit. To continue, please settle your previous transactions first.",
+    "moreThanMaxDecimalPlaces": "The number of decimal places must be less than or equal to {value}.",
+    "notPaidYet": "The amount for this transaction has not yet been paid by the user.",
+    "priceCannotBeEmpty": "The price field cannot be empty.",
+    "fixedPriceTransactionsAreNotAllowed": "Fixed price transactions are not allowed.",
+    "priceMismatch": "The price has changed, please try again.",
+    "payLaterBuyNotAllowed": "Pay later buy is not allowed."
+  },
+  "product": {
+    "notFound": "Product not found.",
+    "uniqueField": "Following field are duplicated: {field}",
+    "quantitativeWithoutWeight": "Quantitative product weight cannot be 0.",
+    "emptyMinDeliverableAmount": "The minDeliverableAmount field cannot be empty.",
+    "cantDelete": "Your request is not possible. A product request has been registered for this product.",
+    "outOfStock": "Sorry, the requested quantity exceeds the available stock. Please reduce the requested quantity or contact support.",
+    "groupUniqueField": "Following field are duplicated: {field}",
+    "groupNotFound": "Product group not found.",
+    "cantDeleteGroup": "Your request is not possible. This group has at least one product, remove them first please.",
+    "alreadyHasAGroup": "Your request is not possible. This product already is in another group."
+  },
+  "productRequest": {
+    "notFound": "Product request not found.",
+    "lessThanMinDeliverable": "The requested amount must be more than {value}.",
+    "cantChangeStatus": "Cannot change product request status to requested one.",
+    "moreThanMaxDecimalPlaces": "The number of decimal places must be less than or equal to {value}."
+  },
+  "factor": {
+    "notFound": "Factor not found."
+  },
+  "balanceTransaction": {
+    "notFound": "Transaction not found.",
+    "cantUpdateStatus": "This transaction cannot be updated.",
+    "lessThanMinDepositAmount": "The requested deposit amount must not less than {value}.",
+    "lessThanMinWithdrawAmount": "The requested withdraw amount must not less than {value}.",
+    "gatewayIsDisabled": "This gateway is currently inactive.",
+    "userHasNoRegisteredCard": "You have no registered cards."
+  },
+  "externalApis": {
+    "sourceBankIsNotActive": "Source bank is not active.",
+    "providerIsNotActive": "Card provider is not active.",
+    "blackListed": "The inquiry of this card is not possible.",
+    "notValid": "Card is not valid.",
+    "notActive": "Card is not active.",
+    "isExpired": "Card is expired.",
+    "registeredAsLost": "Card registered as lost.",
+    "registeredAsStolen": "Card registered as stolen.",
+    "accountNumberNotValid": "Account number is not valid.",
+    "ownerNotAuthorized": "Card owner identity is not valid.",
+    "naCodeAndCardNotMatch": "The national code does not match the card number.",
+    "ibanNotFound": "Iban not found.",
+    "ibanNotValid": "Iban is not valid.",
+    "ibanOwnerNotFound": "Iban owner not valid.",
+    "cardTypeNotSupported": "Card type is not supported.",
+    "nationalCodeNotValid": "National code is not valid.",
+    "mobileNumberNotValid": "Mobile number is not valid.",
+    "naCodeAndMobileNotMatch": "The national code does not match the mobile number.",
+    "identityNotFound": "Identity info not found.",
+    "nationalCodeBlackListed": "Inquiry for this national code is not possible."
+  },
+  "settings": {
+    "timeConflict": "Time conflict in rule {ruleNumber}. start time must be less than end time."
+  },
+  "discount": {
+    "uniqueField": "Following field are duplicated: {field}.",
+    "notFound": "Discount not found.",
+    "used": "The discount code has already been used.",
+    "amountIsNotValid": "Entered amount is not valid.",
+    "expired": "The discount is expired.",
+    "notValidForProduct": "The discount is not valid for this product."
+  },
+  "level": {
+    "notFound": "Level not found.",
+    "uniqueField": "Following field are duplicated: {field}.",
+    "cannotDeleteLevelOne": "Level 1 cannot be deleted.",
+    "cannotDelete": "Your request is not possible. At least one user with this level exists in the system."
+  },
+  "withdrawLimit": {
+    "notFound": "Limit not found.",
+    "moreThanLimit": "Your withdrawal amount in this time period exceeds the allowed limit.",
+    "timeConflict": "start time must be less than end time."
+  },
+  "message": {
+    "notFound": "Message not found."
+  },
+  "ticket": {
+    "notFound": "Ticket not found.",
+    "notActive": "This ticket is closed."
+  },
+  "tradeLimit": {
+    "notFound": "Trade limit not found.",
+    "moreThanLimit": "Your transaction amount in this time period exceeds the allowed limit.",
+    "timeConflict": "start time must be less than end time.",
+    "timeDifference": "The start time and end time must have no more than 24h difference."
+  },
+  "tradeable": {
+    "notFound": "Tradeable not found.",
+    "uniqueField": "Following field are duplicated: {field}.",
+    "cantDelete": "Your request is not possible. A product or transaction has been registered for this tradable.",
+    "badPriceApi": "The provided values for retrieving the price did not result in a valid number.",
+    "notEnoughUserInventory": "The requested transaction exceeds available user inventory.",
+    "outOfStock": "Sorry, the requested quantity exceeds the available stock. Please reduce the requested quantity or contact support."
+  },
+  "userInventory": {
+    "notFound": "User inventory not found."
+  },
+  "orderBook": {
+    "orderNotFound": "Order not found.",
+    "cannotCancelOrder": "This order cannot be canceled.",
+    "priceCannotBeEmpty": "The price field cannot be empty.",
+    "amountCannotBeEmpty": "The amount field cannot be empty.",
+    "totalCannotBeEmpty": "The total field cannot be empty.",
+    "orderBookSettingsUniqueField": "Following field are duplicated: {field}.",
+    "orderBookSettingsNotFound": "Settings not found.",
+    "orderingDisabled": "Order placement is disabled for you."
+  },
+  "giftCard": {
+    "notFound": "Gift card not found.",
+    "cantChangeStatus": "Cannot change gift card status to requested one.",
+    "used": "The gift card has already been used.",
+    "lessThanMinWeight": "The requested amount must be a multiple of {value}.",
+    "settingsUniqueField": "Following field are duplicated: {field}.",
+    "settingsNotFound": "Settings not found.",
+    "cannotDelete": "Only pending gift cards can be deleted.",
+    "invalidWeight": "Acceptable values must be one of the following: [{value}].",
+    "invalidDeliveryType": "Invalid delivery type."
+  },
+  "branch": {
+    "notFound": "Branch not found.",
+    "branchTimeNotFound": "Branch time not found.",
+    "cantDelete": "Your request is not possible. A time slot has already been scheduled for this branch.",
+    "cantDeleteBranchTime": "Your request is not possible. A request for physical delivery has been scheduled for this time.",
+    "branchTimeHasNoCapacity": "The selected time slot for the branch is full. Please choose another time.",
+    "branchTimeTimeConflict": "start time must be less than end time."
+  },
+  "transfer": {
+    "notFound": "Transfer not found.",
+    "moreThanMaxDecimalPlaces": "The number of decimal places must be less than or equal to {value}.",
+    "cantChangeStatus": "The transfer status cannot be changed.",
+    "expiredCode": "Entered code is expired.",
+    "wrongCode": "Entered code is wrong."
+  },
+  "stake": {
+    "planNotFound": "Stake plan not found.",
+    "planNotActive": "This stake plan is not active.",
+    "planHasStakes": "This stake plan has stakes and cannot be deleted.",
+    "stakeNotFound": "Stake not found.",
+    "stakeNotActive": "This stake is not active."
+  },
+  "userFee": {
+    "notFound": "User fee not found.",
+    "alreadyExists": "User fee already exists."
+  }
+}

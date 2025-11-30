@@ -1,0 +1,321 @@
+{"context":"NestFactory","level":"info","message":"Starting Nest application...","timestamp":"2025-11-30T12:19:39.584+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MongooseModule dependencies initialized","timestamp":"2025-11-30T12:19:39.637+03:30"}
+{"context":"InstanceLoader","level":"info","message":"JwtModule dependencies initialized","timestamp":"2025-11-30T12:19:39.639+03:30"}
+{"context":"InstanceLoader","level":"info","message":"ConfigHostModule dependencies initialized","timestamp":"2025-11-30T12:19:39.640+03:30"}
+{"context":"InstanceLoader","level":"info","message":"DiscoveryModule dependencies initialized","timestamp":"2025-11-30T12:19:39.641+03:30"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized","timestamp":"2025-11-30T12:19:39.643+03:30"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized","timestamp":"2025-11-30T12:19:39.643+03:30"}
+{"context":"InstanceLoader","level":"info","message":"ScheduleModule dependencies initialized","timestamp":"2025-11-30T12:19:39.644+03:30"}
+{"context":"InstanceLoader","level":"info","message":"GeneralModule dependencies initialized","timestamp":"2025-11-30T12:19:39.679+03:30"}
+{"context":"InstanceLoader","level":"info","message":"ServeStaticModule dependencies initialized","timestamp":"2025-11-30T12:19:39.680+03:30"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized","timestamp":"2025-11-30T12:19:39.680+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MongooseCoreModule dependencies initialized","timestamp":"2025-11-30T12:19:39.732+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MongooseModule dependencies initialized","timestamp":"2025-11-30T12:19:39.760+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MongooseModule dependencies initialized","timestamp":"2025-11-30T12:19:39.761+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MongooseModule dependencies initialized","timestamp":"2025-11-30T12:19:39.761+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MongooseModule dependencies initialized","timestamp":"2025-11-30T12:19:39.761+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MongooseModule dependencies initialized","timestamp":"2025-11-30T12:19:39.762+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MongooseModule dependencies initialized","timestamp":"2025-11-30T12:19:39.762+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MongooseModule dependencies initialized","timestamp":"2025-11-30T12:19:39.762+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MongooseModule dependencies initialized","timestamp":"2025-11-30T12:19:39.763+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MongooseModule dependencies initialized","timestamp":"2025-11-30T12:19:39.763+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MongooseModule dependencies initialized","timestamp":"2025-11-30T12:19:39.763+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MongooseModule dependencies initialized","timestamp":"2025-11-30T12:19:39.764+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MongooseModule dependencies initialized","timestamp":"2025-11-30T12:19:39.764+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MongooseModule dependencies initialized","timestamp":"2025-11-30T12:19:39.764+03:30"}
+{"context":"InstanceLoader","level":"info","message":"I18nModule dependencies initialized","timestamp":"2025-11-30T12:19:39.779+03:30"}
+{"context":"InstanceLoader","level":"info","message":"ExtConsumerModule dependencies initialized","timestamp":"2025-11-30T12:19:39.781+03:30"}
+{"context":"InstanceLoader","level":"info","message":"ExternalApisModule dependencies initialized","timestamp":"2025-11-30T12:19:39.781+03:30"}
+{"context":"InstanceLoader","level":"info","message":"SettingsModule dependencies initialized","timestamp":"2025-11-30T12:19:39.784+03:30"}
+{"context":"InstanceLoader","level":"info","message":"BranchModule dependencies initialized","timestamp":"2025-11-30T12:19:39.784+03:30"}
+{"context":"InstanceLoader","level":"info","message":"MessageModule dependencies initialized","timestamp":"2025-11-30T12:19:39.785+03:30"}
+{"context":"InstanceLoader","level":"info","message":"LevelModule dependencies initialized","timestamp":"2025-11-30T12:19:39.785+03:30"}
+{"context":"InstanceLoader","level":"info","message":"TransactionModule dependencies initialized","timestamp":"2025-11-30T12:19:39.785+03:30"}
+{"context":"InstanceLoader","level":"info","message":"ProductModule dependencies initialized","timestamp":"2025-11-30T12:19:39.786+03:30"}
+{"context":"InstanceLoader","level":"info","message":"TicketModule dependencies initialized","timestamp":"2025-11-30T12:19:39.786+03:30"}
+{"context":"InstanceLoader","level":"info","message":"UserModule dependencies initialized","timestamp":"2025-11-30T12:19:39.786+03:30"}
+{"context":"InstanceLoader","level":"info","message":"TradeableModule dependencies initialized","timestamp":"2025-11-30T12:19:39.787+03:30"}
+{"context":"InstanceLoader","level":"info","message":"BalanceTransactionModule dependencies initialized","timestamp":"2025-11-30T12:19:39.787+03:30"}
+{"context":"InstanceLoader","level":"info","message":"OrderBookModule dependencies initialized","timestamp":"2025-11-30T12:19:39.787+03:30"}
+{"context":"InstanceLoader","level":"info","message":"StakeModule dependencies initialized","timestamp":"2025-11-30T12:19:39.787+03:30"}
+{"context":"InstanceLoader","level":"info","message":"AuthModule dependencies initialized","timestamp":"2025-11-30T12:19:39.788+03:30"}
+{"context":"InstanceLoader","level":"info","message":"GiftCardModule dependencies initialized","timestamp":"2025-11-30T12:19:39.788+03:30"}
+{"context":"Utils","level":"info","message":"Folder already exists at public","timestamp":"2025-11-30T12:19:39.800+03:30"}
+{"context":"Utils","level":"info","message":"Folder already exists at public/report","timestamp":"2025-11-30T12:19:39.805+03:30"}
+{"context":"Utils","level":"info","message":"Folder already exists at public/ticket","timestamp":"2025-11-30T12:19:39.808+03:30"}
+{"context":"RoutesResolver","level":"info","message":"AppController {/}:","timestamp":"2025-11-30T12:19:39.824+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/upload, POST} route","timestamp":"2025-11-30T12:19:39.828+03:30"}
+{"context":"RoutesResolver","level":"info","message":"AuthController {/auth}:","timestamp":"2025-11-30T12:19:39.828+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/auth/register, POST} route","timestamp":"2025-11-30T12:19:39.829+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/auth/login/otp, POST} route","timestamp":"2025-11-30T12:19:39.829+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/auth/login/otp-verify, POST} route","timestamp":"2025-11-30T12:19:39.830+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/auth/login/password, POST} route","timestamp":"2025-11-30T12:19:39.831+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/auth/refresh-tokens, POST} route","timestamp":"2025-11-30T12:19:39.832+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/auth/logout, GET} route","timestamp":"2025-11-30T12:19:39.832+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/auth/change-password, POST} route","timestamp":"2025-11-30T12:19:39.833+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/auth/admin/login/otp, POST} route","timestamp":"2025-11-30T12:19:39.833+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/auth/admin/login/otp-verify, POST} route","timestamp":"2025-11-30T12:19:39.834+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/auth/admin/login/password, POST} route","timestamp":"2025-11-30T12:19:39.835+03:30"}
+{"context":"RoutesResolver","level":"info","message":"UserController {/user}:","timestamp":"2025-11-30T12:19:39.835+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/create-admin, POST} route","timestamp":"2025-11-30T12:19:39.836+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user, GET} route","timestamp":"2025-11-30T12:19:39.836+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user, POST} route","timestamp":"2025-11-30T12:19:39.836+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/order-book-is-active, PATCH} route","timestamp":"2025-11-30T12:19:39.837+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.837+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/:id/change-role, PATCH} route","timestamp":"2025-11-30T12:19:39.838+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/new-users-report, GET} route","timestamp":"2025-11-30T12:19:39.838+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/me, GET} route","timestamp":"2025-11-30T12:19:39.839+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/online-first-step-verify, POST} route","timestamp":"2025-11-30T12:19:39.839+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/offline-first-step-verify/request, POST} route","timestamp":"2025-11-30T12:19:39.840+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/offline-first-step-verify/confirm, PATCH} route","timestamp":"2025-11-30T12:19:39.840+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/second-step-verify/request, POST} route","timestamp":"2025-11-30T12:19:39.840+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/second-step-verify/confirm, PATCH} route","timestamp":"2025-11-30T12:19:39.841+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/mobile-number/change-request, POST} route","timestamp":"2025-11-30T12:19:39.841+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/mobile-number/verify-otp, POST} route","timestamp":"2025-11-30T12:19:39.842+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/mobile-number/inquiry, POST} route","timestamp":"2025-11-30T12:19:39.842+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/vandar-id-deposit, GET} route","timestamp":"2025-11-30T12:19:39.842+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/:id/balance, PATCH} route","timestamp":"2025-11-30T12:19:39.843+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/:id, DELETE} route","timestamp":"2025-11-30T12:19:39.843+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/card/online, POST} route","timestamp":"2025-11-30T12:19:39.844+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/card/offline, POST} route","timestamp":"2025-11-30T12:19:39.844+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/card/:id/offline-confirm, PATCH} route","timestamp":"2025-11-30T12:19:39.844+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/card, GET} route","timestamp":"2025-11-30T12:19:39.845+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/card/:id, DELETE} route","timestamp":"2025-11-30T12:19:39.845+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/balance-log/me, GET} route","timestamp":"2025-11-30T12:19:39.846+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/user/balance-log/:id, GET} route","timestamp":"2025-11-30T12:19:39.846+03:30"}
+{"context":"RoutesResolver","level":"info","message":"SettingsController {/settings}:","timestamp":"2025-11-30T12:19:39.846+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/settings, GET} route","timestamp":"2025-11-30T12:19:39.847+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/settings, PATCH} route","timestamp":"2025-11-30T12:19:39.847+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/settings/vandar-tokens, PATCH} route","timestamp":"2025-11-30T12:19:39.847+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/settings/public-settings, GET} route","timestamp":"2025-11-30T12:19:39.848+03:30"}
+{"context":"RoutesResolver","level":"info","message":"LevelController {/level}:","timestamp":"2025-11-30T12:19:39.848+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/level, POST} route","timestamp":"2025-11-30T12:19:39.848+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/level/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.849+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/level, GET} route","timestamp":"2025-11-30T12:19:39.849+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/level/:id, DELETE} route","timestamp":"2025-11-30T12:19:39.850+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/level/prices, GET} route","timestamp":"2025-11-30T12:19:39.850+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/level/update-user-levels, GET} route","timestamp":"2025-11-30T12:19:39.850+03:30"}
+{"context":"RoutesResolver","level":"info","message":"TradeableController {/tradeable}:","timestamp":"2025-11-30T12:19:39.851+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/tradeable, POST} route","timestamp":"2025-11-30T12:19:39.851+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/tradeable, GET} route","timestamp":"2025-11-30T12:19:39.851+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/tradeable/public, GET} route","timestamp":"2025-11-30T12:19:39.852+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/tradeable/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.852+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/tradeable/:id, DELETE} route","timestamp":"2025-11-30T12:19:39.853+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/tradeable/user-inventory/me, GET} route","timestamp":"2025-11-30T12:19:39.853+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/tradeable/user-inventory, GET} route","timestamp":"2025-11-30T12:19:39.853+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/tradeable/user-inventory/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.854+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/tradeable/transfer, POST} route","timestamp":"2025-11-30T12:19:39.854+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/tradeable/transfer/:id/confirm, PATCH} route","timestamp":"2025-11-30T12:19:39.855+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/tradeable/transfer, GET} route","timestamp":"2025-11-30T12:19:39.855+03:30"}
+{"context":"RoutesResolver","level":"info","message":"TransactionController {/transaction}:","timestamp":"2025-11-30T12:19:39.855+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction, POST} route","timestamp":"2025-11-30T12:19:39.856+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/:id/cancel, PATCH} route","timestamp":"2025-11-30T12:19:39.856+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/:id/verify, PATCH} route","timestamp":"2025-11-30T12:19:39.857+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/pay-later-buy, POST} route","timestamp":"2025-11-30T12:19:39.857+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/pay-later-buy/:id/pay, PATCH} route","timestamp":"2025-11-30T12:19:39.857+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction, GET} route","timestamp":"2025-11-30T12:19:39.858+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/count-report, GET} route","timestamp":"2025-11-30T12:19:39.858+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/report, POST} route","timestamp":"2025-11-30T12:19:39.858+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/report, GET} route","timestamp":"2025-11-30T12:19:39.859+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/trade-limit, POST} route","timestamp":"2025-11-30T12:19:39.859+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/trade-limit, GET} route","timestamp":"2025-11-30T12:19:39.860+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/trade-limit/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.860+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/trade-limit/:id, DELETE} route","timestamp":"2025-11-30T12:19:39.860+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/user-fee, POST} route","timestamp":"2025-11-30T12:19:39.861+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/user-fee, GET} route","timestamp":"2025-11-30T12:19:39.861+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/user-fee/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.862+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/user-fee/:id, DELETE} route","timestamp":"2025-11-30T12:19:39.862+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/transaction/user-prices, GET} route","timestamp":"2025-11-30T12:19:39.863+03:30"}
+{"context":"RoutesResolver","level":"info","message":"GiftCardController {/gift-card}:","timestamp":"2025-11-30T12:19:39.863+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/gift-card, POST} route","timestamp":"2025-11-30T12:19:39.863+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/gift-card/admin, POST} route","timestamp":"2025-11-30T12:19:39.864+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/gift-card/:id/verify, PATCH} route","timestamp":"2025-11-30T12:19:39.864+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/gift-card, GET} route","timestamp":"2025-11-30T12:19:39.864+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/gift-card/:code/apply, PATCH} route","timestamp":"2025-11-30T12:19:39.865+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/gift-card/:id, DELETE} route","timestamp":"2025-11-30T12:19:39.865+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/gift-card/settings, POST} route","timestamp":"2025-11-30T12:19:39.865+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/gift-card/settings, GET} route","timestamp":"2025-11-30T12:19:39.866+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/gift-card/settings/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.866+03:30"}
+{"context":"RoutesResolver","level":"info","message":"BranchController {/branch}:","timestamp":"2025-11-30T12:19:39.866+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/branch, POST} route","timestamp":"2025-11-30T12:19:39.867+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/branch/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.867+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/branch, GET} route","timestamp":"2025-11-30T12:19:39.868+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/branch/:id, DELETE} route","timestamp":"2025-11-30T12:19:39.868+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/branch/branch-time, POST} route","timestamp":"2025-11-30T12:19:39.869+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/branch/branch-time/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.869+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/branch/branch-time, GET} route","timestamp":"2025-11-30T12:19:39.870+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/branch/branch-time/:id, DELETE} route","timestamp":"2025-11-30T12:19:39.870+03:30"}
+{"context":"RoutesResolver","level":"info","message":"ProductController {/}:","timestamp":"2025-11-30T12:19:39.870+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product/without-price, POST} route","timestamp":"2025-11-30T12:19:39.871+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product/with-price, POST} route","timestamp":"2025-11-30T12:19:39.871+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product/admin, GET} route","timestamp":"2025-11-30T12:19:39.872+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product, GET} route","timestamp":"2025-11-30T12:19:39.872+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product/:slug, GET} route","timestamp":"2025-11-30T12:19:39.873+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product/without-price/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.873+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product/with-price/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.873+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product/:id, DELETE} route","timestamp":"2025-11-30T12:19:39.874+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product-group, POST} route","timestamp":"2025-11-30T12:19:39.874+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product-group, GET} route","timestamp":"2025-11-30T12:19:39.875+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product-group/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.875+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product-group/:id, DELETE} route","timestamp":"2025-11-30T12:19:39.875+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product-group/add-product, POST} route","timestamp":"2025-11-30T12:19:39.876+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product-group/:id/remove-from-group, PATCH} route","timestamp":"2025-11-30T12:19:39.876+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/discount, POST} route","timestamp":"2025-11-30T12:19:39.876+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/discount, GET} route","timestamp":"2025-11-30T12:19:39.877+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/discount/:id, DELETE} route","timestamp":"2025-11-30T12:19:39.877+03:30"}
+{"context":"RoutesResolver","level":"info","message":"ProductRequestController {/}:","timestamp":"2025-11-30T12:19:39.878+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product-request, POST} route","timestamp":"2025-11-30T12:19:39.878+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product-request/check-price, GET} route","timestamp":"2025-11-30T12:19:39.878+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product-request, GET} route","timestamp":"2025-11-30T12:19:39.879+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/product-request/verify/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.879+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/factor, POST} route","timestamp":"2025-11-30T12:19:39.880+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/factor, GET} route","timestamp":"2025-11-30T12:19:39.880+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/factor/pay/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.880+03:30"}
+{"context":"RoutesResolver","level":"info","message":"BalanceTransactionController {/balance-transaction}:","timestamp":"2025-11-30T12:19:39.881+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/balance-transaction/vandar/online-deposit, POST} route","timestamp":"2025-11-30T12:19:39.881+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/balance-transaction/vandar/payment-callback/:id, GET} route","timestamp":"2025-11-30T12:19:39.881+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/balance-transaction/paystar/online-deposit, POST} route","timestamp":"2025-11-30T12:19:39.882+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/balance-transaction/paystar/payment-callback/:id, POST} route","timestamp":"2025-11-30T12:19:39.882+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/balance-transaction/saman/online-deposit, POST} route","timestamp":"2025-11-30T12:19:39.883+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/balance-transaction/saman/payment-callback, POST} route","timestamp":"2025-11-30T12:19:39.883+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/balance-transaction/offline-deposit, POST} route","timestamp":"2025-11-30T12:19:39.883+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/balance-transaction/confirm-offline-deposit, PATCH} route","timestamp":"2025-11-30T12:19:39.884+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/balance-transaction/withdraw, POST} route","timestamp":"2025-11-30T12:19:39.884+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/balance-transaction/confirm-withdraw, PATCH} route","timestamp":"2025-11-30T12:19:39.884+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/balance-transaction/me, GET} route","timestamp":"2025-11-30T12:19:39.885+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/balance-transaction, GET} route","timestamp":"2025-11-30T12:19:39.885+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/balance-transaction/withdraw-limit, POST} route","timestamp":"2025-11-30T12:19:39.885+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/balance-transaction/withdraw-limit, GET} route","timestamp":"2025-11-30T12:19:39.886+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/balance-transaction/withdraw-limit/:id, DELETE} route","timestamp":"2025-11-30T12:19:39.886+03:30"}
+{"context":"RoutesResolver","level":"info","message":"GeneralController {/general}:","timestamp":"2025-11-30T12:19:39.886+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/general/statistics, GET} route","timestamp":"2025-11-30T12:19:39.887+03:30"}
+{"context":"RoutesResolver","level":"info","message":"MessageController {/message}:","timestamp":"2025-11-30T12:19:39.887+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/message, POST} route","timestamp":"2025-11-30T12:19:39.888+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/message, GET} route","timestamp":"2025-11-30T12:19:39.888+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/message/my-messages, GET} route","timestamp":"2025-11-30T12:19:39.889+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/message/read/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.889+03:30"}
+{"context":"RoutesResolver","level":"info","message":"TicketController {/ticket}:","timestamp":"2025-11-30T12:19:39.889+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/ticket/upload, POST} route","timestamp":"2025-11-30T12:19:39.890+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/ticket, POST} route","timestamp":"2025-11-30T12:19:39.890+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/ticket/message, POST} route","timestamp":"2025-11-30T12:19:39.891+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/ticket/chat, GET} route","timestamp":"2025-11-30T12:19:39.891+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/ticket, GET} route","timestamp":"2025-11-30T12:19:39.891+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/ticket/:id/deactivate, PATCH} route","timestamp":"2025-11-30T12:19:39.892+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/ticket/:id/read, PATCH} route","timestamp":"2025-11-30T12:19:39.892+03:30"}
+{"context":"RoutesResolver","level":"info","message":"OrderBookController {/order-book}:","timestamp":"2025-11-30T12:19:39.892+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/order-book, POST} route","timestamp":"2025-11-30T12:19:39.893+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/order-book/cancel-order/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.893+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/order-book, GET} route","timestamp":"2025-11-30T12:19:39.893+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/order-book/me, GET} route","timestamp":"2025-11-30T12:19:39.894+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/order-book/order-book-settings, POST} route","timestamp":"2025-11-30T12:19:39.894+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/order-book/order-book-settings, GET} route","timestamp":"2025-11-30T12:19:39.894+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/order-book/order-book-settings/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.895+03:30"}
+{"context":"RoutesResolver","level":"info","message":"ExtConsumerController {/v1/ext-consumer}:","timestamp":"2025-11-30T12:19:39.895+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/v1/ext-consumer/users, GET} route","timestamp":"2025-11-30T12:19:39.895+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/v1/ext-consumer/balance-transactions, GET} route","timestamp":"2025-11-30T12:19:39.896+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/v1/ext-consumer/transactions, GET} route","timestamp":"2025-11-30T12:19:39.896+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/v1/ext-consumer/products, GET} route","timestamp":"2025-11-30T12:19:39.896+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/v1/ext-consumer/product-requests, GET} route","timestamp":"2025-11-30T12:19:39.897+03:30"}
+{"context":"RoutesResolver","level":"info","message":"StakeController {/staking}:","timestamp":"2025-11-30T12:19:39.897+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/staking/plan, POST} route","timestamp":"2025-11-30T12:19:39.897+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/staking/plan, GET} route","timestamp":"2025-11-30T12:19:39.898+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/staking/plan/:id, PATCH} route","timestamp":"2025-11-30T12:19:39.898+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/staking/plan/:id, DELETE} route","timestamp":"2025-11-30T12:19:39.898+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/staking/stake, POST} route","timestamp":"2025-11-30T12:19:39.899+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/staking/stake, GET} route","timestamp":"2025-11-30T12:19:39.899+03:30"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/staking/stake/:id/cancel, PATCH} route","timestamp":"2025-11-30T12:19:39.900+03:30"}
+{"context":"TradeableService","level":"info","message":"Pending tradeable transfers that did not succeed are rejected.","timestamp":"2025-11-30T12:19:40.051+03:30"}
+{"context":"ZarbahaPriceGetter","level":"info","message":"Zarbaha token updated.","timestamp":"2025-11-30T12:19:40.134+03:30"}
+{"context":"BalanceTransactionService","level":"info","message":"Pending BalanceTransactions (OnlineDeposit) that did not succeed are rejected.","timestamp":"2025-11-30T12:19:40.147+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:19:40.155+03:30"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started","timestamp":"2025-11-30T12:19:40.225+03:30"}
+{"context":"BranchService","level":"info","message":"Recurring branch times updated.","timestamp":"2025-11-30T12:19:40.264+03:30"}
+{"context":"ProductService","level":"info","message":"The prices of the products have been updated.","timestamp":"2025-11-30T12:19:40.322+03:30"}
+{"context":"TradeableService","level":"info","message":"The prices of the tradeables have been updated.","timestamp":"2025-11-30T12:19:40.329+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:20:00.062+03:30"}
+{"context":"ProductService","level":"info","message":"The prices of the products have been updated.","timestamp":"2025-11-30T12:20:00.157+03:30"}
+{"context":"TradeableService","level":"info","message":"The prices of the tradeables have been updated.","timestamp":"2025-11-30T12:20:00.306+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:21:00.009+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:22:00.023+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:23:00.010+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:24:00.009+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:25:00.223+03:30"}
+{"context":"ProductService","level":"info","message":"The prices of the products have been updated.","timestamp":"2025-11-30T12:25:00.507+03:30"}
+{"context":"TradeableService","level":"info","message":"The prices of the tradeables have been updated.","timestamp":"2025-11-30T12:25:02.016+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:26:00.009+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:27:00.025+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:28:00.012+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:29:00.009+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:30:00.141+03:30"}
+{"context":"ZarbahaPriceGetter","level":"info","message":"Zarbaha token updated.","timestamp":"2025-11-30T12:30:00.209+03:30"}
+{"context":"TradeableService","level":"info","message":"The prices of the tradeables have been updated.","timestamp":"2025-11-30T12:30:00.309+03:30"}
+{"context":"ProductService","level":"info","message":"The prices of the products have been updated.","timestamp":"2025-11-30T12:30:00.408+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:31:00.013+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:32:00.010+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:33:00.011+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:34:00.006+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:35:00.044+03:30"}
+{"context":"TradeableService","level":"info","message":"The prices of the tradeables have been updated.","timestamp":"2025-11-30T12:35:00.178+03:30"}
+{"context":"ProductService","level":"info","message":"The prices of the products have been updated.","timestamp":"2025-11-30T12:35:00.207+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:36:00.010+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:37:00.013+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:38:00.009+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:39:00.010+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:40:00.026+03:30"}
+{"context":"TradeableService","level":"info","message":"The prices of the tradeables have been updated.","timestamp":"2025-11-30T12:40:00.226+03:30"}
+{"context":"ProductService","level":"info","message":"The prices of the products have been updated.","timestamp":"2025-11-30T12:40:00.229+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:41:00.011+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:42:00.018+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:43:00.011+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:44:00.012+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:45:00.027+03:30"}
+{"context":"TradeableService","level":"info","message":"The prices of the tradeables have been updated.","timestamp":"2025-11-30T12:45:00.839+03:30"}
+{"context":"ProductService","level":"info","message":"The prices of the products have been updated.","timestamp":"2025-11-30T12:45:00.852+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:46:00.012+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:47:00.022+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:48:00.013+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:49:00.009+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:50:00.041+03:30"}
+{"context":"ProductService","level":"info","message":"The prices of the products have been updated.","timestamp":"2025-11-30T12:50:00.223+03:30"}
+{"context":"TradeableService","level":"info","message":"The prices of the tradeables have been updated.","timestamp":"2025-11-30T12:50:00.243+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:51:00.013+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:52:00.013+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:53:00.010+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:54:00.009+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:55:00.108+03:30"}
+{"context":"ProductService","level":"info","message":"The prices of the products have been updated.","timestamp":"2025-11-30T12:55:00.230+03:30"}
+{"context":"TradeableService","level":"info","message":"The prices of the tradeables have been updated.","timestamp":"2025-11-30T12:55:00.280+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:56:00.007+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:57:00.019+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:58:00.008+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T12:59:00.012+03:30"}
+{"context":"BalanceTransactionService","level":"info","message":"Pending BalanceTransactions (OnlineDeposit) that did not succeed are rejected.","timestamp":"2025-11-30T13:00:00.133+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:00:00.138+03:30"}
+{"context":"TradeableService","level":"info","message":"Pending tradeable transfers that did not succeed are rejected.","timestamp":"2025-11-30T13:00:00.208+03:30"}
+{"context":"ZarbahaPriceGetter","level":"info","message":"Zarbaha token updated.","timestamp":"2025-11-30T13:00:00.228+03:30"}
+{"context":"TradeableService","level":"info","message":"The prices of the tradeables have been updated.","timestamp":"2025-11-30T13:00:00.353+03:30"}
+{"context":"ProductService","level":"info","message":"The prices of the products have been updated.","timestamp":"2025-11-30T13:00:00.374+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:01:00.011+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:02:00.018+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:03:00.006+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:04:00.007+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:05:00.025+03:30"}
+{"context":"ProductService","level":"info","message":"The prices of the products have been updated.","timestamp":"2025-11-30T13:05:00.223+03:30"}
+{"context":"TradeableService","level":"info","message":"The prices of the tradeables have been updated.","timestamp":"2025-11-30T13:05:00.238+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:06:00.006+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:07:00.013+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:08:00.016+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:09:00.012+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:10:00.020+03:30"}
+{"context":"TradeableService","level":"info","message":"The prices of the tradeables have been updated.","timestamp":"2025-11-30T13:10:00.202+03:30"}
+{"context":"ProductService","level":"info","message":"The prices of the products have been updated.","timestamp":"2025-11-30T13:10:00.216+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:11:00.009+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:12:00.014+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:13:00.011+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:14:00.010+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:15:00.026+03:30"}
+{"context":"TradeableService","level":"info","message":"The prices of the tradeables have been updated.","timestamp":"2025-11-30T13:15:00.144+03:30"}
+{"context":"ProductService","level":"info","message":"The prices of the products have been updated.","timestamp":"2025-11-30T13:15:00.184+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:16:00.012+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:17:00.018+03:30"}
+{"context":"TransactionService","level":"info","message":"Pending PayLater transactions that have reached their deadline are rejected.","timestamp":"2025-11-30T13:18:00.008+03:30"}
