@@ -36,11 +36,11 @@ async function sendEmail(subject, doc, user) {
     `Wage: ${doc.wage ?? '-'}`,
     `Total: ${doc.total ?? '-'}`,
     `TradeablePrice: ${doc.tradeablePrice ?? '-'}`,
+    `Tradeable: ${doc.tradeableName ?? doc.tradeable ?? '-'}`,
     `Status: ${doc.status ?? '-'}`,
     `CreatedAt: ${doc.createdAt ?? '-'}`,
     `UpdatedAt: ${doc.updatedAt ?? '-'}`,
     `ConfirmDescription: ${doc.confirmDescription ?? '-'}`,
-    `Tradeable: ${doc.tradeable ?? '-'}`,
     `_id: ${doc._id}`,
     userDetails, // Add user details to the email
   ].join('\n');
@@ -165,9 +165,21 @@ async function main() {
     transactionsStream.on('change', async (ev) => {
       const doc = ev.fullDocument || {};
       const user = await collUsers.findOne({ _id: doc.user }); // Fetch user info
+      
+      // Fetch tradeable info
+      const collTradeables = db.collection('tradeables');
+      const tradeable = doc.tradeable ? await collTradeables.findOne({ _id: doc.tradeable }) : null;
+      const tradeableName = tradeable ? (tradeable.name || tradeable.symbol || 'Unknown') : '-';
 
-      const subject = `New Transaction — ${doc.type || ''} ${doc.amount || ''} (${doc.status || ''})`;
-      await sendEmail(subject, doc, user); // Send email with transaction and user details
+      const subject = `New Transaction — ${doc.type || ''} ${doc.amount || ''} ${tradeableName} (${doc.status || ''})`;
+      
+      // Create custom doc with tradeable name
+      const enrichedDoc = {
+        ...doc,
+        tradeableName: tradeableName,
+      };
+      
+      await sendEmail(subject, enrichedDoc, user); // Send email with transaction, user and tradeable details
       saveToken('transactions', transactionsStream.resumeToken);
     });
 
