@@ -10,6 +10,9 @@ const originalCreate = core.NestFactory.create;
 core.NestFactory.create = async function(...args) {
     const app = await originalCreate.apply(this, args);
     
+    // Wait for app to be fully initialized
+    await app.init();
+    
     // Add SMS proxy and hooks to the Express instance
     const httpAdapter = app.getHttpAdapter();
     const instance = httpAdapter.getInstance();
