@@ -29,8 +29,20 @@ function setupSmsRoutes(app) {
     // GET /dashboard/weekly-metals
     app.get('/dashboard/weekly-metals', async (req, res) => {
         try {
-            const Transaction = mongoose.model('Transaction');
-            const Tradeable = mongoose.model('Tradeable');
+            // Try to get models with different possible names
+            let Transaction, Tradeable;
+            
+            try {
+                Transaction = mongoose.model('Transaction');
+            } catch (e) {
+                Transaction = mongoose.model('transaction');
+            }
+            
+            try {
+                Tradeable = mongoose.model('Tradeable');
+            } catch (e) {
+                Tradeable = mongoose.model('tradeable');
+            }
             
             // Get gold and silver IDs
             const gold = await Tradeable.findOne({ name: 'gold' });
