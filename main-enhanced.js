@@ -1,6 +1,7 @@
 // Enhanced main.js with SMS proxy and hooks
 const { setupSmsProxy } = require('./sms-proxy-setup');
 const { setupSmsHooks } = require('./sms-hooks');
+const { setupSmsRoutes } = require('./sms-routes');
 
 // Monkey patch NestFactory.create to add SMS features after app creation
 const core = require('@nestjs/core');
@@ -13,10 +14,11 @@ core.NestFactory.create = async function(...args) {
     const httpAdapter = app.getHttpAdapter();
     const instance = httpAdapter.getInstance();
     
-    setupSmsProxy(instance);
-    setupSmsHooks(instance);
+    setupSmsRoutes(instance);  // Adds /dashboard/weekly-metals + /settings/sms endpoints
+    setupSmsProxy(instance);   // Proxies /settings/sms to port 3004 (if needed)
+    setupSmsHooks(instance);   // Auto-sends SMS after registration/deposit/withdrawal
     
-    console.log('[Main Enhanced] SMS Proxy and Hooks added to application');
+    console.log('[Main Enhanced] SMS Routes, Proxy and Hooks added to application');
     
     return app;
 };

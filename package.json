@@ -6,8 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "start": "node main.js",
-    "dev": "nodemon --watch . --exec \"node main.js\""
+    "start": "node main-enhanced.js",
+    "dev": "nodemon --watch . --exec \"node main-enhanced.js\""
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
