@@ -3,8 +3,23 @@ const mongoose = require('mongoose');
 class DashboardController {
     async getWeeklyMetals(req, res) {
         try {
-            const Transaction = mongoose.model('Transaction');
-            const Tradeable = mongoose.model('Tradeable');
+            // List all registered models for debugging
+            const modelNames = mongoose.modelNames();
+            console.log('[Dashboard] Registered models:', modelNames);
+            
+            // Find the correct model names
+            const transactionModelName = modelNames.find(name => name.toLowerCase().includes('transaction'));
+            const tradeableModelName = modelNames.find(name => name.toLowerCase().includes('tradeable'));
+            
+            if (!transactionModelName || !tradeableModelName) {
+                return res.status(500).json({ 
+                    message: 'Required models not found',
+                    availableModels: modelNames 
+                });
+            }
+            
+            const Transaction = mongoose.model(transactionModelName);
+            const Tradeable = mongoose.model(tradeableModelName);
             
             // Get gold and silver IDs
             const gold = await Tradeable.findOne({ name: 'gold' });
