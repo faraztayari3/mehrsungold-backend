@@ -29,20 +29,23 @@ function setupSmsRoutes(app) {
     // GET /dashboard/weekly-metals
     app.get('/dashboard/weekly-metals', async (req, res) => {
         try {
-            // Try to get models with different possible names
-            let Transaction, Tradeable;
+            // List all registered models for debugging
+            const modelNames = mongoose.modelNames();
+            console.log('[Dashboard] Registered models:', modelNames);
             
-            try {
-                Transaction = mongoose.model('Transaction');
-            } catch (e) {
-                Transaction = mongoose.model('transaction');
+            // Find the correct model names
+            const transactionModelName = modelNames.find(name => name.toLowerCase().includes('transaction'));
+            const tradeableModelName = modelNames.find(name => name.toLowerCase().includes('tradeable'));
+            
+            if (!transactionModelName || !tradeableModelName) {
+                return res.status(500).json({ 
+                    message: 'Required models not found',
+                    availableModels: modelNames 
+                });
             }
             
-            try {
-                Tradeable = mongoose.model('Tradeable');
-            } catch (e) {
-                Tradeable = mongoose.model('tradeable');
-            }
+            const Transaction = mongoose.model(transactionModelName);
+            const Tradeable = mongoose.model(tradeableModelName);
             
             // Get gold and silver IDs
             const gold = await Tradeable.findOne({ name: 'gold' });
