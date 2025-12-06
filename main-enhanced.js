@@ -10,18 +10,21 @@ const originalCreate = core.NestFactory.create;
 core.NestFactory.create = async function(...args) {
     const app = await originalCreate.apply(this, args);
     
-    // Wait for app to be fully initialized
-    await app.init();
-    
-    // Add SMS proxy and hooks to the Express instance
-    const httpAdapter = app.getHttpAdapter();
-    const instance = httpAdapter.getInstance();
-    
-    setupSmsRoutes(instance);  // Adds /dashboard/weekly-metals + /settings/sms endpoints
-    setupSmsProxy(instance);   // Proxies /settings/sms to port 3004 (if needed)
-    setupSmsHooks(instance);   // Auto-sends SMS after registration/deposit/withdrawal
-    
-    console.log('[Main Enhanced] SMS Routes, Proxy and Hooks added to application');
+    // Monkey patch listen to add routes after app is fully ready
+    const originalListen = app.listen;
+    app.listen = async function(...listenArgs) {
+        // Add SMS features before listening
+        const httpAdapter = app.getHttpAdapter();
+        const instance = httpAdapter.getInstance();
+        
+        setupSmsRoutes(instance);  // Adds /dashboard/weekly-metals + /settings/sms endpoints
+        setupSmsProxy(instance);   // Proxies /settings/sms to port 3004 (if needed)
+        setupSmsHooks(instance);   // Auto-sends SMS after registration/deposit/withdrawal
+        
+        console.log('[Main Enhanced] SMS Routes, Proxy and Hooks added to application');
+        
+        return originalListen.apply(this, listenArgs);
+    };
     
     return app;
 };
