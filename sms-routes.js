@@ -21,7 +21,8 @@ const SMSSettingsSchema = new mongoose.Schema({
     unverifiedUsers: { type: SMSTemplateSchema, required: true }
 }, { versionKey: false });
 
-const SmsSettingsModel = mongoose.model('smssettings', SMSSettingsSchema);
+// Check if model already exists to avoid OverwriteModelError
+const SmsSettingsModel = mongoose.models.smssettings || mongoose.model('smssettings', SMSSettingsSchema);
 const smsService = new SmsService(SmsSettingsModel);
 
 function setupSmsRoutes(app) {
