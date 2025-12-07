@@ -202,6 +202,93 @@ function setupSmsRoutes(app) {
             });
         }
     });
+
+    // POST /sms/send/registration - Manual trigger for registration SMS
+    app.post('/sms/send/registration', async (req, res) => {
+        try {
+            const { mobileNumber } = req.body;
+            
+            if (!mobileNumber) {
+                return res.status(400).json({ 
+                    statusCode: 400,
+                    message: 'شماره موبایل الزامی است' 
+                });
+            }
+
+            await smsService.sendRegistrationSMS({ mobileNumber });
+            
+            res.json({ 
+                statusCode: 200,
+                message: 'پیامک ثبت نام با موفقیت ارسال شد' 
+            });
+        } catch (error) {
+            console.error('Error sending registration SMS:', error);
+            res.status(500).json({ 
+                statusCode: 500,
+                message: 'خطا در ارسال پیامک: ' + error.message 
+            });
+        }
+    });
+
+    // POST /sms/send/deposit - Manual trigger for deposit SMS
+    app.post('/sms/send/deposit', async (req, res) => {
+        try {
+            const { mobileNumber, amount } = req.body;
+            
+            if (!mobileNumber) {
+                return res.status(400).json({ 
+                    statusCode: 400,
+                    message: 'شماره موبایل الزامی است' 
+                });
+            }
+
+            await smsService.sendDepositSMS(
+                { mobileNumber }, 
+                { amount: amount || 0 }
+            );
+            
+            res.json({ 
+                statusCode: 200,
+                message: 'پیامک واریز با موفقیت ارسال شد' 
+            });
+        } catch (error) {
+            console.error('Error sending deposit SMS:', error);
+            res.status(500).json({ 
+                statusCode: 500,
+                message: 'خطا در ارسال پیامک: ' + error.message 
+            });
+        }
+    });
+
+    // POST /sms/send/withdrawal - Manual trigger for withdrawal SMS
+    app.post('/sms/send/withdrawal', async (req, res) => {
+        try {
+            const { mobileNumber, amount } = req.body;
+            
+            if (!mobileNumber) {
+                return res.status(400).json({ 
+                    statusCode: 400,
+                    message: 'شماره موبایل الزامی است' 
+                });
+            }
+
+            await smsService.sendWithdrawalSMS(
+                { mobileNumber }, 
+                { amount: amount || 0 }
+            );
+            
+            res.json({ 
+                statusCode: 200,
+                message: 'پیامک برداشت با موفقیت ارسال شد' 
+            });
+        } catch (error) {
+            console.error('Error sending withdrawal SMS:', error);
+            res.status(500).json({ 
+                statusCode: 500,
+                message: 'خطا در ارسال پیامک: ' + error.message 
+            });
+        }
+    });
 }
 
 module.exports = { setupSmsRoutes };
