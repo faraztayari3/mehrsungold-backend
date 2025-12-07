@@ -14,12 +14,18 @@ const { SmsService } = require('./sms/sms.service');
 // MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/mehrsungold';
 
+console.log('🔍 Attempting MongoDB connection to:', MONGO_URI);
+
 mongoose.connect(MONGO_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000 // Timeout after 5s instead of 30s
 })
 .then(() => console.log('✅ MongoDB connected for SMS service'))
-.catch(err => console.error('❌ MongoDB connection error:', err));
+.catch(err => {
+    console.error('❌ MongoDB connection error:', err.message);
+    console.log('⚠️  SMS service will continue without database (settings won\'t persist)');
+});
 
 // Define SMS Settings Schema
 const SMSTemplateSchema = new mongoose.Schema({
@@ -48,8 +54,19 @@ const smsService = new SmsService(SmsSettingsModel);
 const app = express();
 const PORT = process.env.SMS_PORT || 3005;
 
-// Middleware
-app.use(cors());
+// Middleware - CORS configured for production
+app.use(cors({
+    origin: [
+        'https://panel.mehrsun.gold',
+        'http://panel.mehrsun.gold',
+        'http://localhost:3000',
+        'http://172.17.0.33',
+        'http://172.17.0.68'
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // Simple auth middleware (you can enhance this)
