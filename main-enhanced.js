@@ -1,36 +1,24 @@
-// Enhanced main.js with SMS proxy and hooks
-const { setupSmsProxy } = require('./sms-proxy-setup');
-const { setupSmsHooks } = require('./sms-hooks');
-const dashboardRoutes = require('./dashboard/dashboard.routes');
+// Enhanced main.js - Add custom routes via middleware injection
+const dashboardController = require('./dashboard/dashboard.controller');
+const controller = new dashboardController.DashboardController();
 
-// Monkey patch NestFactory.create to add SMS features after app creation
-const core = require('@nestjs/core');
-const originalCreate = core.NestFactory.create;
-
-core.NestFactory.create = async function(...args) {
-    const app = await originalCreate.apply(this, args);
-    
-    // Monkey patch listen to add routes after app is fully ready
-    const originalListen = app.listen;
-    app.listen = async function(...listenArgs) {
-        // Add SMS features before listening
-        const httpAdapter = app.getHttpAdapter();
-        const instance = httpAdapter.getInstance();
-        
-        // Mount dashboard routes
-        instance.use('/dashboard', dashboardRoutes);
-        console.log('[Main Enhanced] Dashboard routes mounted');
-        
-        setupSmsProxy(instance);   // Proxies /settings/sms to port 3004 (if needed)
-        setupSmsHooks(instance);   // Auto-sends SMS after registration/deposit/withdrawal
-        
-        console.log('[Main Enhanced] SMS Proxy and Hooks added to application');
-        
-        return originalListen.apply(this, listenArgs);
-    };
-    
-    return app;
-};
-
-// Now require the original main.js to trigger bootstrap
+// First require main.js to start the app
 require('./main.js');
+
+// Then after a delay, try to inject routes via global object
+setTimeout(() => {
+    try {
+        // Try to get the Express app instance from global scope
+        if (global.__nestApp) {
+            const httpAdapter = global.__nestApp.getHttpAdapter();
+            const app = httpAdapter.getInstance();
+            
+            // Add dashboard route
+            app.get('/dashboard/weekly-metals', (req, res) => controller.getWeeklyMetals(req, res));
+            
+            console.log('[Main Enhanced] Dashboard routes added via global injection');
+        }
+    } catch (error) {
+        console.error('[Main Enhanced] Failed to inject routes:', error.message);
+    }
+}, 3000); // Wait 3 seconds for app to fully initialize

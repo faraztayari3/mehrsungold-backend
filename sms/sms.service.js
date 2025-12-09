@@ -18,14 +18,40 @@ const { InjectModel } = require('@nestjs/mongoose');
 const Kavenegar = require('kavenegar');
 
 let SmsService = class SmsService {
-    constructor(smsSettingsModel) {
+    constructor(smsSettingsModel, smsLogModel = null) {
         this.smsSettingsModel = smsSettingsModel;
+        this.smsLogModel = smsLogModel;
         this.logger = new Logger(SmsService.name);
         this.api = Kavenegar.KavenegarApi({
-            apikey: '4B37447A59365645492B5A52646F674E785474384F6D75373872396C6E5A334C5A31367650576A306E73673D'
+            apikey: process.env.KAVENEGAR_API_KEY || '4B37447A59365645492B5A52646F674E785474384F6D75373872396C6E5A334C5A31367650576A306E73673D'
         });
-        this.sender = '10018018949161';
-        this.templateCode = 'gold-register'; // Template name for lookup
+        this.sender = process.env.KAVENEGAR_SENDER || '20006000646';
+        this.templateCode = 'gold-register'; // kept for backward-compat when lookup is still used
+    }
+
+    /**
+     * Log SMS sending attempt
+     */
+    async logSMS(mobileNumber, type, message, status, response = null, error = null, metadata = {}) {
+        if (!this.smsLogModel) {
+            return; // Skip logging if model not available
+        }
+        
+        try {
+            await this.smsLogModel.create({
+                mobileNumber,
+                type,
+                message,
+                status,
+                response,
+                error,
+                amount: metadata.amount || null,
+                recipientCount: metadata.recipientCount || 1,
+                sentAt: new Date()
+            });
+        } catch (logError) {
+            this.logger.error(`Failed to log SMS: ${logError.message}`);
+        }
     }
 
     /**
@@ -115,6 +141,38 @@ let SmsService = class SmsService {
     }
 
     /**
+     * Send plain text SMS (non-template) using advertising line
+     */
+    async sendPlainSMS(receptor, message, senderOverride, type = 'bulk', metadata = {}) {
+        const sender = senderOverride || this.sender;
+        try {
+            const response = await new Promise((resolve, reject) => {
+                this.api.Send({
+                    message,
+                    sender,
+                    receptor
+                }, (response, status) => {
+                    if (status === 200) {
+                        this.logger.log(`Plain SMS sent to ${receptor} via ${sender}`);
+                        resolve(response);
+                    } else {
+                        this.logger.error(`Plain SMS failed (${status}) to ${receptor}`);
+                        reject(new Error(`Plain SMS failed with status: ${status}`));
+                    }
+                });
+            });
+            
+            // Log success
+            await this.logSMS(receptor, type, message, 'sent', response, null, metadata);
+            return response;
+        } catch (error) {
+            // Log failure
+            await this.logSMS(receptor, type, message, 'failed', null, error.message, metadata);
+            throw error;
+        }
+    }
+
+    /**
      * Send registration SMS
      */
     async sendRegistrationSMS(user) {
@@ -122,11 +180,19 @@ let SmsService = class SmsService {
             const settings = await this.getSettings();
             
             if (!settings.registration.enabled) {
+                this.logger.log('Registration SMS is disabled');
                 return;
             }
 
-            // Use tokens from settings
-            await this.sendSMS(user.mobileNumber, settings.registration.templateName, settings.registration.tokens);
+            // Check if message exists
+            if (!settings.registration.message) {
+                this.logger.warn('Registration SMS enabled but no message text found');
+                return;
+            }
+
+            // Send plain text SMS
+            await this.sendPlainSMS(user.mobileNumber, settings.registration.message, null, 'registration');
+            this.logger.log(`Registration SMS sent to ${user.mobileNumber}`);
         } catch (error) {
             this.logger.error(`Error sending registration SMS: ${error.message}`);
         }
@@ -143,8 +209,20 @@ let SmsService = class SmsService {
                 return;
             }
 
-            // Use tokens from settings
-            await this.sendSMS(user.mobileNumber, settings.deposit.templateName, settings.deposit.tokens);
+            if (!settings.deposit.message) {
+                this.logger.warn('Deposit SMS enabled but no message text found');
+                return;
+            }
+
+            // Replace tags in message
+            let message = settings.deposit.message;
+            if (transaction && transaction.amount) {
+                message = message.replace(/\{amount\}/g, transaction.amount);
+            }
+
+            await this.sendPlainSMS(user.mobileNumber, message, null, 'deposit', { 
+                amount: transaction?.amount 
+            });
         } catch (error) {
             this.logger.error(`Error sending deposit SMS: ${error.message}`);
         }
@@ -161,8 +239,20 @@ let SmsService = class SmsService {
                 return;
             }
 
-            // Use tokens from settings
-            await this.sendSMS(user.mobileNumber, settings.withdrawal.templateName, settings.withdrawal.tokens);
+            if (!settings.withdrawal.message) {
+                this.logger.warn('Withdrawal SMS enabled but no message text found');
+                return;
+            }
+
+            // Replace tags in message
+            let message = settings.withdrawal.message;
+            if (transaction && transaction.amount) {
+                message = message.replace(/\{amount\}/g, transaction.amount);
+            }
+
+            await this.sendPlainSMS(user.mobileNumber, message, null, 'withdrawal', { 
+                amount: transaction?.amount 
+            });
         } catch (error) {
             this.logger.error(`Error sending withdrawal SMS: ${error.message}`);
         }

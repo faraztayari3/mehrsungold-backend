@@ -21,7 +21,7 @@ SmsModule = __decorate([
             MongooseModule.forFeature([
                 { name: 'SMSSettings', schema: SMSSettingsSchema }
             ])
-        ],
+        ],  
         controllers: [SmsController],
         providers: [SmsService],
         exports: [SmsService]
