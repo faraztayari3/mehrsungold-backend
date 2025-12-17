@@ -10,6 +10,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const { SmsService } = require('./sms/sms.service');
+const ScheduledSmsService = require('./sms/scheduled-sms.service');
 const ScheduledSmsController = require('./sms/scheduled-sms.controller');
 const SmsScheduler = require('./sms/sms-scheduler');
 
@@ -49,8 +50,8 @@ const SMSSettingsSchema = new mongoose.Schema({
     unverifiedUsers: { type: SMSTemplateSchema, required: true }
 }, { versionKey: false });
 
-// Check if model already exists to avoid OverwriteModelError
-const SmsSettingsModel = mongoose.models.smssettings || mongoose.model('smssettings', SMSSettingsSchema);
+    // Check if model already exists to avoid OverwriteModelError
+    const SmsSettingsModel = mongoose.models.smssettings || mongoose.model('smssettings', SMSSettingsSchema);
 
 // Define SMS Log Schema
 const SmsLogSchema = new mongoose.Schema({
@@ -68,6 +69,9 @@ const SmsLogSchema = new mongoose.Schema({
 const SmsLogModel = mongoose.models.SmsLog || mongoose.model('SmsLog', SmsLogSchema);
 
 const smsService = new SmsService(SmsSettingsModel, SmsLogModel);
+const scheduledSmsService = new ScheduledSmsService({ smsService });
+const scheduledSmsController = new ScheduledSmsController(scheduledSmsService);
+const smsScheduler = new SmsScheduler(scheduledSmsService);
 
 // Create Express App
 const app = express();
@@ -78,6 +82,8 @@ app.use(cors({
     origin: [
         'https://panel.mehrsun.gold',
         'http://panel.mehrsun.gold',
+        'https://gateway.mehrsun.gold',
+        'http://gateway.mehrsun.gold',
         'http://localhost:3000',
         'http://localhost:3001',
         'http://localhost:3002',
@@ -406,7 +412,6 @@ app.get('/sms/logs', authMiddleware, async (req, res) => {
 });
 
 // ==================== Scheduled SMS Routes ====================
-const scheduledSmsController = new ScheduledSmsController();
 
 // Create scheduled SMS
 app.post('/sms/scheduled', async (req, res) => {
@@ -456,7 +461,6 @@ app.listen(PORT, () => {
     console.log(`📤 Send endpoints available at /sms/send/*\n`);
     
     // شروع Scheduler برای پیامک‌های زمان‌بندی شده
-    const smsScheduler = new SmsScheduler();
     smsScheduler.start();
 });
 

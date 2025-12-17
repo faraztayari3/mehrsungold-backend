@@ -1,8 +1,8 @@
 const ScheduledSmsService = require('./scheduled-sms.service');
 
 class ScheduledSmsController {
-  constructor() {
-    this.scheduledSmsService = new ScheduledSmsService();
+  constructor(scheduledSmsService = new ScheduledSmsService()) {
+    this.scheduledSmsService = scheduledSmsService;
   }
 
   // ایجاد پیامک شرطی جدید

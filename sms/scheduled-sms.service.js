@@ -1,8 +1,34 @@
 const ScheduledSms = require('./schema/scheduled-sms.schema');
 const User = require('../user/schema/user.schema');
+const { SmsService } = require('./sms.service');
 const parser = require('cron-parser');
 
+// Shared SMS settings/log models for non-Nest usage
+let smsServiceSingleton = null;
+
+function getSmsServiceInstance() {
+  if (smsServiceSingleton) return smsServiceSingleton;
+
+  const mongoose = require('mongoose');
+
+  // Reuse existing models if defined (as set up in sms-standalone-server)
+  const smsSettingsModel = mongoose.models.smssettings;
+  const smsLogModel = mongoose.models.SmsLog;
+
+  if (!smsSettingsModel) {
+    throw new Error('SMS settings model not initialized');
+  }
+
+  smsServiceSingleton = new SmsService(smsSettingsModel, smsLogModel || null);
+  return smsServiceSingleton;
+}
+
 class ScheduledSmsService {
+  constructor(options = {}) {
+    // Allow the host server to inject an SmsService; otherwise lazily build from mongoose models
+    this.smsService = options.smsService || null;
+  }
+
   async create(data, userId) {
     const scheduledSms = new ScheduledSms({
       ...data,
@@ -124,6 +150,9 @@ class ScheduledSmsService {
   // متد اصلی برای پردازش و ارسال پیامک
   async processScheduledSms(scheduledSms) {
     try {
+      // Ensure SMS service is available
+      const smsService = this.smsService || getSmsServiceInstance();
+
       scheduledSms.status = 'processing';
       scheduledSms.execution.lastRunAt = new Date();
       await scheduledSms.save();
@@ -138,11 +167,15 @@ class ScheduledSmsService {
       let sentCount = 0;
       let failedCount = 0;
 
-      // این قسمت باید با SmsService واقعی شما ادغام شود
-      // برای هر کاربر پیامک ارسال می‌شود
       for (const user of users) {
         try {
-          // await smsService.sendPlainSMS(user.mobileNumber, scheduledSms.message);
+          await smsService.sendPlainSMS(
+            user.mobileNumber,
+            scheduledSms.message,
+            null,
+            'filtered',
+            { recipientCount: users.length }
+          );
           sentCount++;
         } catch (error) {
           failedCount++;

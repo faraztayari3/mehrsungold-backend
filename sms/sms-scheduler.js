@@ -2,8 +2,8 @@ const cron = require('node-cron');
 const ScheduledSmsService = require('./scheduled-sms.service');
 
 class SmsScheduler {
-  constructor() {
-    this.scheduledSmsService = new ScheduledSmsService();
+  constructor(scheduledSmsService = new ScheduledSmsService()) {
+    this.scheduledSmsService = scheduledSmsService;
     this.isRunning = false;
   }
 

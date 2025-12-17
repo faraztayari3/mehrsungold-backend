@@ -1,23 +1,133 @@
 // Enhanced main.js - Add custom routes via middleware injection
 const dashboardController = require('./dashboard/dashboard.controller');
+const { setupSmsProxy } = require('./sms-proxy-setup');
+const path = require('path');
+const fs = require('fs');
+
 const controller = new dashboardController.DashboardController();
+
+// Capture the Nest app instance without modifying the obfuscated main.js.
+// main.js calls NestFactory.create(...). We monkey-patch it to store the app.
+try {
+    const nestCore = require('@nestjs/core');
+    const originalCreate = nestCore.NestFactory.create;
+
+    if (!global.__nestCreatePatched) {
+        nestCore.NestFactory.create = async (...args) => {
+            const app = await originalCreate.apply(nestCore.NestFactory, args);
+            global.__nestApp = app;
+            return app;
+        };
+        global.__nestCreatePatched = true;
+    }
+} catch (error) {
+    // If patching fails, the server can still boot normally.
+    console.error('[Main Enhanced] Failed to patch NestFactory.create:', error.message);
+}
 
 // First require main.js to start the app
 require('./main.js');
 
-// Then after a delay, try to inject routes via global object
+// Then after a delay, inject extra Express routes/middlewares
 setTimeout(() => {
     try {
-        // Try to get the Express app instance from global scope
-        if (global.__nestApp) {
-            const httpAdapter = global.__nestApp.getHttpAdapter();
-            const app = httpAdapter.getInstance();
-            
-            // Add dashboard route
-            app.get('/dashboard/weekly-metals', (req, res) => controller.getWeeklyMetals(req, res));
-            
-            console.log('[Main Enhanced] Dashboard routes added via global injection');
+        if (!global.__nestApp) {
+            console.warn('[Main Enhanced] Nest app instance not available; skipping injections');
+            return;
         }
+
+        // Ensure CORS is configured for the production panel domain.
+        // main.js currently calls enableCors() with defaults, but we want explicit origins + credentials
+        // so preflight requests from https://panel.mehrsun.gold do not get blocked.
+        if (!global.__corsConfigured) {
+            const allowedOrigins = [
+                'https://panel.mehrsun.gold',
+                'https://mehrsun.gold',
+                'https://www.mehrsun.gold',
+                'http://localhost:3000',
+                'http://localhost:3001',
+                'http://localhost:3002',
+            ];
+
+            global.__nestApp.enableCors({
+                origin: (origin, cb) => {
+                    try {
+                        if (!origin) return cb(null, true);
+                        if (allowedOrigins.includes(origin)) return cb(null, true);
+                        if (/^https:\/\/([a-z0-9-]+\.)?mehrsun\.gold$/i.test(origin)) return cb(null, true);
+                        return cb(new Error('Not allowed by CORS'), false);
+                    } catch (e) {
+                        return cb(null, true);
+                    }
+                },
+                credentials: true,
+                methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+                maxAge: 86400,
+            });
+
+            global.__corsConfigured = true;
+            console.log('[Main Enhanced] CORS configured');
+        }
+
+        const httpAdapter = global.__nestApp.getHttpAdapter();
+        const app = httpAdapter.getInstance();
+
+        // Add dashboard route
+        app.get('/dashboard/weekly-metals', (req, res) => controller.getWeeklyMetals(req, res));
+
+        // Add SMS proxy routes (GET/PUT /settings/sms, /sms/*, /health)
+        setupSmsProxy(app);
+
+        // Serve generated transaction export reports
+        // TransactionService writes files to `${FILES_PATH}/report/<token>.xlsx` and stores `${BASE_URL}/report/<token>.xlsx` in DB.
+        // Ensure `/report/*` is always resolvable even if ServeStaticModule rootPath differs between environments.
+        try {
+            let filesPath = process.env.FILES_PATH;
+            try {
+                const { ConfigService } = require('@nestjs/config');
+                const configService = global.__nestApp.get(ConfigService);
+                filesPath = filesPath || configService.get('FILES_PATH');
+            } catch (e) {
+                // ignore
+            }
+
+            const candidates = [
+                filesPath ? path.join(filesPath, 'report') : null,
+                path.join(__dirname, 'public', 'report'),
+                path.join(__dirname, '..', 'public', 'report'),
+            ].filter(Boolean);
+
+            const reportDir = candidates.find((p) => {
+                try {
+                    return fs.existsSync(p) && fs.statSync(p).isDirectory();
+                } catch (e) {
+                    return false;
+                }
+            });
+
+            if (reportDir) {
+                // eslint-disable-next-line global-require
+                const express = require('express');
+                app.use(
+                    '/report',
+                    express.static(reportDir, {
+                        index: false,
+                        fallthrough: true,
+                        setHeaders: (res) => {
+                            res.setHeader('Access-Control-Allow-Origin', '*');
+                            res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+                        },
+                    }),
+                );
+                console.log(`[Main Enhanced] Report files served at /report from: ${reportDir}`);
+            } else {
+                console.warn('[Main Enhanced] Report directory not found; /report downloads may fail');
+            }
+        } catch (e) {
+            console.error('[Main Enhanced] Failed to configure /report static serving:', e.message);
+        }
+
+        console.log('[Main Enhanced] Extra routes added via injection');
     } catch (error) {
         console.error('[Main Enhanced] Failed to inject routes:', error.message);
     }

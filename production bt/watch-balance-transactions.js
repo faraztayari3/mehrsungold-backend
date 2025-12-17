@@ -1,8 +1,7 @@
 const path = require('path');
 const dotenv = require('dotenv');
 
-// Load env from bt-mailer/.env, and also try backend root .env (parent folder)
-// This helps when the process is started with a single shared env file.
+// Load env from bt-mailer/.env, and also try parent .env
 dotenv.config({ path: path.join(__dirname, '.env'), override: false });
 dotenv.config({ path: path.join(__dirname, '..', '.env'), override: false });
 
@@ -72,6 +71,10 @@ const transporter = hasEmailConfig
       auth: { user: SMTP_USER, pass: SMTP_PASS },
     })
   : null;
+
+console.log(
+  `bt-mailer config: email=${transporter ? 'enabled' : 'disabled'} sms=${kavenegarApi ? 'enabled' : 'disabled'} receptors=${smsReceptors.length}`
+);
 
 function normalizeDigitsToAscii(str) {
   return String(str)
@@ -159,8 +162,8 @@ function pickFirstPresent(doc, keys) {
 
 function userLabel(user) {
   if (!user) return '-';
-  const name = `${user.firstName || ''} ${user.lastName || ''}`.trim();
-  return name || user.mobileNumber || '-';
+  const name = `${user.firstName || '-'} ${user.lastName || '-'}`.trim().replace(/\s+/g, ' ');
+  return name === '- -' ? (user.mobileNumber || '-') : name;
 }
 
 function mapTxnType(type) {
@@ -372,10 +375,10 @@ async function main() {
       status: 'ok',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      confirmDescription: 'local test',
-      _id: 'local-test',
+      confirmDescription: 'server test',
+      _id: 'server-test',
     };
-    const sampleUser = { firstName: 'Local', lastName: 'Test', mobileNumber: '09120000000' };
+    const sampleUser = { firstName: 'Server', lastName: 'Test', mobileNumber: '09120000000' };
 
     await sendEmail(subject, sampleDoc, sampleUser);
     await sendSms('transaction', sampleDoc, sampleUser);
