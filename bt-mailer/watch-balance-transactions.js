@@ -860,11 +860,16 @@ async function main() {
       if (ev.operationType === 'update') {
         const user = await collUsers.findOne({ _id: doc._id });
         
-        // Check if user just verified their mobile number (OTP confirmed)
-        // This happens when verificationCode is cleared after successful OTP entry
-        if (Object.prototype.hasOwnProperty.call(updated, 'verificationCode') && 
-            (updated.verificationCode === null || updated.verificationCode === undefined || updated.verificationCode === '')) {
-          // User successfully verified OTP - send welcome SMS
+        // Welcome SMS must be ONE-TIME only: after the very first successful OTP.
+        // `verificationCode` can be set/cleared on every OTP login; so we also require
+        // the first-login marker to flip to true.
+        const otpJustConfirmed =
+          Object.prototype.hasOwnProperty.call(updated, 'verificationCode') &&
+          (updated.verificationCode === null || updated.verificationCode === undefined || updated.verificationCode === '');
+        const firstLoginJustDone =
+          Object.prototype.hasOwnProperty.call(updated, 'isFirstLoginDone') && updated.isFirstLoginDone === true;
+
+        if (otpJustConfirmed && firstLoginJustDone) {
           await sendSmsToUser('userRegistration', doc, user);
         }
         
