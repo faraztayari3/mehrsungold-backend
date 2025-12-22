@@ -24,6 +24,15 @@ function getEnv(name, fallback) {
   return trimmed === '' ? fallback : trimmed;
 }
 
+function parseBool(value, fallback = false) {
+  if (value === undefined || value === null) return fallback;
+  const v = String(value).trim().toLowerCase();
+  if (v === '') return fallback;
+  if (['1', 'true', 'yes', 'y', 'on', 'enable', 'enabled'].includes(v)) return true;
+  if (['0', 'false', 'no', 'n', 'off', 'disable', 'disabled'].includes(v)) return false;
+  return fallback;
+}
+
 function splitCsv(value) {
   return String(value || '')
     .split(',')
@@ -47,6 +56,44 @@ const KAVENEGAR_SENDER = getEnv('KAVENEGAR_SENDER');
 const KAVENEGAR_RECEPTOR = getEnv('KAVENEGAR_RECEPTOR');
 
 const isTestMode = process.argv.includes('--test');
+
+// ---------- sms safety ----------
+// Modes:
+// - off:      never send SMS (default)
+// - dry-run:  log what would be sent
+// - live:     actually send (requires SMS_ALLOW_LIVE=true)
+const SMS_MODE_RAW = String(getEnv('SMS_MODE', isTestMode ? 'dry-run' : 'off')).trim().toLowerCase();
+const SMS_MODE = ['off', 'dry-run', 'dryrun', 'live'].includes(SMS_MODE_RAW)
+  ? (SMS_MODE_RAW === 'dryrun' ? 'dry-run' : SMS_MODE_RAW)
+  : (isTestMode ? 'dry-run' : 'off');
+
+const SMS_ALLOW_LIVE = parseBool(getEnv('SMS_ALLOW_LIVE'), false);
+const SMS_ALLOW_NON_PROD = parseBool(getEnv('SMS_ALLOW_NON_PROD'), false);
+const SMS_TEST_CAN_SEND = parseBool(getEnv('SMS_TEST_CAN_SEND'), false);
+const SMS_MAX_PER_MINUTE = Number(getEnv('SMS_MAX_PER_MINUTE', '0')) || 0;
+const smsSendTimestamps = [];
+
+function isProductionEnv() {
+  return String(getEnv('NODE_ENV', '')).trim().toLowerCase() === 'production';
+}
+
+function canSendSmsLive() {
+  if (SMS_MODE !== 'live') return false;
+  if (!SMS_ALLOW_LIVE) return false;
+  if (!isProductionEnv() && !SMS_ALLOW_NON_PROD) return false;
+  if (isTestMode && !SMS_TEST_CAN_SEND) return false;
+  return true;
+}
+
+function rateLimitAllowsSend() {
+  if (!SMS_MAX_PER_MINUTE) return true;
+  const now = Date.now();
+  const windowMs = 60_000;
+  while (smsSendTimestamps.length && now - smsSendTimestamps[0] > windowMs) smsSendTimestamps.shift();
+  if (smsSendTimestamps.length >= SMS_MAX_PER_MINUTE) return false;
+  smsSendTimestamps.push(now);
+  return true;
+}
 
 if (!isTestMode && (!MONGODB_URI || !MONGODB_DB || !MONGODB_COLLECTION)) {
   console.error('Missing Mongo envs. Set MONGODB_URI (or MONGO_URI/DATABASE_URI), MONGODB_DB, MONGODB_COLLECTION.');
@@ -304,6 +351,24 @@ async function sendSms(kind, docOrBodyText, user) {
   const message = typeof docOrBodyText === 'string'
     ? docOrBodyText
     : buildSmsText(kind, docOrBodyText, user);
+
+  if (SMS_MODE === 'off') {
+    console.log('[SMS off] Skipped admin SMS. Would send to:', smsReceptors.join(','));
+    return;
+  }
+  if (SMS_MODE === 'dry-run') {
+    console.log('[SMS dry-run] Admin SMS. To:', smsReceptors.join(','));
+    console.log(message);
+    return;
+  }
+  if (!canSendSmsLive()) {
+    console.warn('[SMS blocked] Admin SMS blocked. Set SMS_MODE=live and SMS_ALLOW_LIVE=true (and NODE_ENV=production).');
+    return;
+  }
+  if (!rateLimitAllowsSend()) {
+    console.error('[SMS blocked] Rate limit reached for admin SMS.');
+    return;
+  }
 
   try {
     await new Promise((resolve, reject) => {

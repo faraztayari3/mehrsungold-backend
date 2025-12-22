@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "samples:user-sms": "node send-sample-user-sms.js --to=09120315101"
   },
   "keywords": [],
   "author": "",
@@ -11,6 +12,7 @@
   "description": "",
   "dependencies": {
     "dotenv": "^17.2.3",
+    "jalali-moment": "^3.3.11",
     "kavenegar": "^2.0.2",
     "mongodb": "^6.20.0",
     "nodemailer": "^7.0.10"

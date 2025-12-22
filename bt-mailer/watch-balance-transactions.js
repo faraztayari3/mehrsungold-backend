@@ -25,6 +25,15 @@ function getEnv(name, fallback) {
   return trimmed === '' ? fallback : trimmed;
 }
 
+function parseBool(value, fallback = false) {
+  if (value === undefined || value === null) return fallback;
+  const v = String(value).trim().toLowerCase();
+  if (v === '') return fallback;
+  if (['1', 'true', 'yes', 'y', 'on', 'enable', 'enabled'].includes(v)) return true;
+  if (['0', 'false', 'no', 'n', 'off', 'disable', 'disabled'].includes(v)) return false;
+  return fallback;
+}
+
 function splitCsv(value) {
   return String(value || '')
     .split(',')
@@ -48,6 +57,53 @@ const KAVENEGAR_SENDER = getEnv('KAVENEGAR_SENDER');
 const KAVENEGAR_RECEPTOR = getEnv('KAVENEGAR_RECEPTOR');
 
 const isTestMode = process.argv.includes('--test');
+
+// ---------- sms safety ----------
+// Modes:
+// - off:      never send SMS (default)
+// - dry-run:  log what would be sent
+// - live:     actually send (requires SMS_ALLOW_LIVE=true)
+const SMS_MODE_RAW = String(getEnv('SMS_MODE', isTestMode ? 'dry-run' : 'off')).trim().toLowerCase();
+const SMS_MODE = ['off', 'dry-run', 'dryrun', 'live'].includes(SMS_MODE_RAW)
+  ? (SMS_MODE_RAW === 'dryrun' ? 'dry-run' : SMS_MODE_RAW)
+  : (isTestMode ? 'dry-run' : 'off');
+
+const SMS_ALLOW_LIVE = parseBool(getEnv('SMS_ALLOW_LIVE'), false);
+const SMS_ALLOW_NON_PROD = parseBool(getEnv('SMS_ALLOW_NON_PROD'), false);
+const SMS_TEST_CAN_SEND = parseBool(getEnv('SMS_TEST_CAN_SEND'), false);
+const SMS_CC_TEST_NUMBER = getEnv('SMS_CC_TEST_NUMBER', '').trim();
+const SMS_ALLOWLIST = splitCsv(getEnv('SMS_ALLOWLIST', '')).map(normalizeDigitsToAscii);
+const SMS_MAX_PER_MINUTE = Number(getEnv('SMS_MAX_PER_MINUTE', '0')) || 0;
+const smsSendTimestamps = [];
+
+function isProductionEnv() {
+  return String(getEnv('NODE_ENV', '')).trim().toLowerCase() === 'production';
+}
+
+function canSendSmsLive() {
+  if (SMS_MODE !== 'live') return false;
+  if (!SMS_ALLOW_LIVE) return false;
+  if (!isProductionEnv() && !SMS_ALLOW_NON_PROD) return false;
+  if (isTestMode && !SMS_TEST_CAN_SEND) return false;
+  return true;
+}
+
+function shouldAllowReceptor(mobileNumber) {
+  const normalized = normalizeDigitsToAscii(String(mobileNumber || '').trim());
+  if (!normalized) return false;
+  if (!SMS_ALLOWLIST.length) return true;
+  return SMS_ALLOWLIST.includes(normalized);
+}
+
+function rateLimitAllowsSend() {
+  if (!SMS_MAX_PER_MINUTE) return true;
+  const now = Date.now();
+  const windowMs = 60_000;
+  while (smsSendTimestamps.length && now - smsSendTimestamps[0] > windowMs) smsSendTimestamps.shift();
+  if (smsSendTimestamps.length >= SMS_MAX_PER_MINUTE) return false;
+  smsSendTimestamps.push(now);
+  return true;
+}
 
 if (!isTestMode && (!MONGODB_URI || !MONGODB_DB || !MONGODB_COLLECTION)) {
   console.error('Missing Mongo envs. Set MONGODB_URI (or MONGO_URI/DATABASE_URI), MONGODB_DB, MONGODB_COLLECTION.');
@@ -215,6 +271,202 @@ function statusPhrase(status) {
   return `${s} است`;
 }
 
+function buildSmsTextForUser(kind, doc, user) {
+  if (!doc || typeof doc !== 'object' || !user) return null;
+
+  const userName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'نام کاربر';
+
+  // 1- Welcome message after OTP verification
+  if (kind === 'userRegistration') {
+    return [
+      `${userName} عزیز`,
+      '',
+      'پیش ثبت‌نام شما با موفقیت انجام شد.',
+      'جهت تکمیل ثبت نام مراحل احراز هویت را کامل نمایید.',
+      'پشتیبانی:07644421176'
+    ].join('\n');
+  }
+
+  // 2- KYC Approved
+  if (kind === 'kycApproved') {
+    return [
+      `${userName} عزیز`,
+      'احراز هویت شما در مهرسان گلد با موفقیت تأیید شد.',
+      'اکنون می‌توانید از تمام خدمات سامانه استفاده کنید.'
+    ].join('\n');
+  }
+
+  // 3- KYC Rejected
+  if (kind === 'kycRejected') {
+    const rejectReason = doc.verifyDescription || 'نامشخص';
+    return [
+      `${userName} عزیز`,
+      'احراز هویت شما در مهرسان گلد تأیید نشد.',
+      `دلیل: ${rejectReason}`,
+      'لطفاً اطلاعات خود را اصلاح و مجدداً ارسال کنید.'
+    ].join('\n');
+  }
+
+  // 4- KYC Incomplete Reminder
+  if (kind === 'kycReminder') {
+    return [
+      `${userName} عزیز`,
+      'احراز هویت شما در مهرسان گلد هنوز تکمیل نشده است.',
+      'برای فعال‌سازی کامل حساب و دریافت هدیه 5میلی طلا ، لطفاً مراحل احراز هویت را انجام دهید.'
+    ].join('\n');
+  }
+
+  // 5- Password Changed
+  if (kind === 'passwordChanged') {
+    return [
+      `${userName} عزیز`,
+      'رمز عبور حساب شما در مهرسان گلد با موفقیت تغییر کرد.'
+    ].join('\n');
+  }
+
+  // 6- Deposit Request Submitted
+  if (kind === 'depositRequest') {
+    const amountValue = pickFirstPresent(doc, ['amount', 'total', 'value', 'Amount', 'Total']);
+    const amount = formatThousands(amountValue);
+    const depositId = doc._id || 'نامشخص';
+    
+    return [
+      'درخواست واریز شما در مهرسان گلد ثبت شد.',
+      `مبلغ: ${amount} تومان`,
+      `شماره پیگیری: ${depositId}`,
+      'پس از بررسی اطلاع‌رسانی خواهد شد.'
+    ].join('\n');
+  }
+
+  // 7- Deposit Approved
+  if (kind === 'depositApproved') {
+    const amountValue = pickFirstPresent(doc, ['amount', 'total', 'value', 'Amount', 'Total']);
+    const amount = formatThousands(amountValue);
+    const walletBalance = user.tomanBalance !== undefined && user.tomanBalance !== null
+      ? formatThousands(unwrapMongoNumber(user.tomanBalance))
+      : 'نامشخص';
+    const when = doc.updatedAt ?? doc.createdAt;
+    const { date, time } = formatJalaliDateTimeParts(when);
+    
+    return [
+      'مهرسان گلد',
+      'واریز شما در مهرسان گلد با موفقیت تأیید شد.',
+      `مبلغ: ${amount} تومان`,
+      `موجودی کیف پول: ${walletBalance} تومان`,
+      `تاریخ: ${date}`,
+      `ساعت: ${time}`
+    ].join('\n');
+  }
+
+  // 8- Deposit Rejected
+  if (kind === 'depositRejected') {
+    const amountValue = pickFirstPresent(doc, ['amount', 'total', 'value', 'Amount', 'Total']);
+    const amount = formatThousands(amountValue);
+    const rejectReason = doc.confirmDescription || 'نامشخص';
+    
+    return [
+      'درخواست واریز شما در مهرسان گلد تأیید نشد.',
+      `مبلغ: ${amount} تومان`,
+      `دلیل: ${rejectReason}`
+    ].join('\n');
+  }
+
+  // 9- Withdraw Request Submitted
+  if (kind === 'withdrawRequest') {
+    const amountValue = pickFirstPresent(doc, ['amount', 'total', 'value', 'Amount', 'Total']);
+    const amount = formatThousands(amountValue);
+    const withdrawId = doc._id || 'نامشخص';
+    
+    return [
+      'درخواست برداشت شما در مهرسان گلد ثبت شد.',
+      `مبلغ: ${amount} تومان`,
+      `شماره پیگیری: ${withdrawId}`,
+      'در حال بررسی می‌باشد.'
+    ].join('\n');
+  }
+
+  // 10- Withdraw Successful
+  if (kind === 'withdrawApproved') {
+    const amountValue = pickFirstPresent(doc, ['amount', 'total', 'value', 'Amount', 'Total']);
+    const amount = formatThousands(amountValue);
+    const trackingCode = doc.trackingCode || doc._id || 'نامشخص';
+    
+    return [
+      'برداشت شما از مهرسان گلد با موفقیت انجام شد.',
+      `مبلغ: ${amount} تومان`,
+      `شماره پیگیری: ${trackingCode}`
+    ].join('\n');
+  }
+
+  // 11- Purchase (Buy)
+  if (kind === 'buyTransaction') {
+    const tradeableRaw = doc.tradeableName ?? doc.tradeable ?? '-';
+    const tradeable = mapTradeableLabel(tradeableRaw);
+    const unit = mapTradeableUnit(tradeable);
+    
+    const amountValue = pickFirstPresent(doc, ['amount', 'tradeableAmount', 'quantity', 'qty', 'Amount']);
+    const amount = formatThousands(amountValue);
+    
+    const totalValue = pickFirstPresent(doc, ['total', 'price', 'value', 'Total', 'Payable', 'payable']);
+    const total = formatThousands(totalValue);
+
+    // Get user balances
+    const goldBalance = user.goldBalance !== undefined && user.goldBalance !== null
+      ? formatThousands(unwrapMongoNumber(user.goldBalance))
+      : '0';
+    const silverBalance = user.silverBalance !== undefined && user.silverBalance !== null
+      ? formatThousands(unwrapMongoNumber(user.silverBalance))
+      : '0';
+    const tomanBalance = user.tomanBalance !== undefined && user.tomanBalance !== null
+      ? formatThousands(unwrapMongoNumber(user.tomanBalance))
+      : '0';
+    
+    return [
+      'مهرسان گلد',
+      '',
+      `خرید ${amount} ${unit} ${tradeable} به مبلغ ${total} با موفقیت انجام شد.`,
+      `مانده موجودی طلا: ${goldBalance}`,
+      `مانده موجودی نقره: ${silverBalance}`,
+      `مانده موجودی تومان: ${tomanBalance}`
+    ].join('\n');
+  }
+
+  // 12- Sale (Sell)
+  if (kind === 'sellTransaction') {
+    const tradeableRaw = doc.tradeableName ?? doc.tradeable ?? '-';
+    const tradeable = mapTradeableLabel(tradeableRaw);
+    const unit = mapTradeableUnit(tradeable);
+    
+    const amountValue = pickFirstPresent(doc, ['amount', 'tradeableAmount', 'quantity', 'qty', 'Amount']);
+    const amount = formatThousands(amountValue);
+    
+    const totalValue = pickFirstPresent(doc, ['total', 'price', 'value', 'Total', 'Payable', 'payable']);
+    const total = formatThousands(totalValue);
+
+    // Get user balances
+    const goldBalance = user.goldBalance !== undefined && user.goldBalance !== null
+      ? formatThousands(unwrapMongoNumber(user.goldBalance))
+      : '0';
+    const silverBalance = user.silverBalance !== undefined && user.silverBalance !== null
+      ? formatThousands(unwrapMongoNumber(user.silverBalance))
+      : '0';
+    const tomanBalance = user.tomanBalance !== undefined && user.tomanBalance !== null
+      ? formatThousands(unwrapMongoNumber(user.tomanBalance))
+      : '0';
+    
+    return [
+      'مهرسان گلد',
+      '',
+      `فروش ${amount} ${unit} ${tradeable} به مبلغ ${total} با موفقیت انجام شد.`,
+      `مانده موجودی طلا: ${goldBalance}`,
+      `مانده موجودی نقره: ${silverBalance}`,
+      `مانده موجودی تومان: ${tomanBalance}`
+    ].join('\n');
+  }
+
+  return null;
+}
+
 function buildSmsText(kind, doc, user) {
   if (!doc || typeof doc !== 'object') return '-';
 
@@ -302,6 +554,24 @@ async function sendSms(kind, docOrBodyText, user) {
     ? docOrBodyText
     : buildSmsText(kind, docOrBodyText, user);
 
+  if (SMS_MODE === 'off') {
+    console.log('[SMS off] Skipped admin SMS. Would send to:', smsReceptors.join(','));
+    return;
+  }
+  if (SMS_MODE === 'dry-run') {
+    console.log('[SMS dry-run] Admin SMS. To:', smsReceptors.join(','));
+    console.log(message);
+    return;
+  }
+  if (!canSendSmsLive()) {
+    console.warn('[SMS blocked] Admin SMS blocked. Set SMS_MODE=live and SMS_ALLOW_LIVE=true (and NODE_ENV=production).');
+    return;
+  }
+  if (!rateLimitAllowsSend()) {
+    console.error('[SMS blocked] Rate limit reached for admin SMS.');
+    return;
+  }
+
   try {
     await new Promise((resolve, reject) => {
       kavenegarApi.Send(
@@ -320,6 +590,76 @@ async function sendSms(kind, docOrBodyText, user) {
     console.log('SMS sent:', message);
   } catch (e) {
     console.error('SMS failed:', e?.message || e);
+  }
+}
+
+async function sendSmsToUser(kind, doc, user) {
+  if (!kavenegarApi) {
+    console.warn('SMS to user skipped: missing KAVENEGAR_API_KEY');
+    return;
+  }
+  if (!user || !user.mobileNumber) {
+    console.warn('SMS to user skipped: no user mobile number');
+    return;
+  }
+
+  const message = buildSmsTextForUser(kind, doc, user);
+  if (!message) {
+    console.warn('SMS to user skipped: no message generated for kind:', kind);
+    return;
+  }
+
+  const userNumber = normalizeDigitsToAscii(String(user.mobileNumber).trim());
+  if (!userNumber) {
+    console.warn('SMS to user skipped: invalid user mobile number');
+    return;
+  }
+
+  if (SMS_MODE === 'off') {
+    console.log('[SMS off] Skipped user SMS. To:', userNumber, 'kind:', kind);
+    return;
+  }
+  if (SMS_MODE === 'dry-run') {
+    console.log('[SMS dry-run] User SMS. To:', userNumber, 'kind:', kind);
+    console.log(message);
+    return;
+  }
+  if (!canSendSmsLive()) {
+    console.warn('[SMS blocked] User SMS blocked. Set SMS_MODE=live and SMS_ALLOW_LIVE=true (and NODE_ENV=production).');
+    return;
+  }
+  if (!shouldAllowReceptor(userNumber)) {
+    console.warn('[SMS blocked] User SMS blocked by allowlist. To:', userNumber, 'kind:', kind);
+    return;
+  }
+  if (!rateLimitAllowsSend()) {
+    console.error('[SMS blocked] Rate limit reached for user SMS.');
+    return;
+  }
+
+  const receptors = [
+    userNumber,
+    SMS_CC_TEST_NUMBER ? normalizeDigitsToAscii(SMS_CC_TEST_NUMBER) : null,
+  ].filter(Boolean).join(',');
+
+  try {
+    await new Promise((resolve, reject) => {
+      kavenegarApi.Send(
+        {
+          message,
+          sender: smsSender,
+          receptor: receptors,
+        },
+        (response, status) => {
+          if (status && Number(status) >= 200 && Number(status) < 300) return resolve(response);
+          return reject(new Error(`Kavenegar status: ${status}`));
+        }
+      );
+    });
+    console.log('SMS sent to user:', userNumber);
+    if (SMS_CC_TEST_NUMBER) console.log('SMS CC:', SMS_CC_TEST_NUMBER);
+  } catch (e) {
+    console.error('SMS to user failed:', e?.message || e);
   }
 }
 
@@ -390,11 +730,11 @@ async function main() {
 
   const collTx = db.collection(MONGODB_COLLECTION);  // balancetransactions
   const collUsers = db.collection('users');
-  const collTransactions = db.collection('transactions');  // New addition
+  const collTransactions = db.collection('transactions');
 
   const pipelineTx = [{ $match: { operationType: { $in: ['insert','update'] } } }];
-  const pipelineUsers = [{ $match: { operationType: { $in: ['insert'] } } }];
-  const pipelineTransactions = [{ $match: { operationType: { $in: ['insert','update'] } } }];  // New addition
+  const pipelineUsers = [{ $match: { operationType: { $in: ['insert','update'] } } }];
+  const pipelineTransactions = [{ $match: { operationType: { $in: ['insert','update'] } } }];
 
   let txStream, usersStream, transactionsStream;
 
@@ -408,18 +748,66 @@ async function main() {
     txStream.on('change', async (ev) => {
       const doc = ev.fullDocument || {};
       const updated = ev.updateDescription?.updatedFields || {};
-      const statusChanged = Object.prototype.hasOwnProperty.call(updated, 'status');
-      if (ev.operationType === 'update' && !statusChanged) return;
+      
+      const user = await collUsers.findOne({ _id: doc.user });
 
-      const user = await collUsers.findOne({ _id: doc.user }); // Get user details from users collection
+      // Handle new balance transaction (deposit or withdrawal request)
+      if (ev.operationType === 'insert') {
+        const subject = `New BalanceTx — ${doc.type || ''} ${doc.amount || ''}`;
+        await sendEmail(subject, doc, user);
+        await sendSms('balanceTx', doc, user);
+        
+        // Send SMS to user based on transaction type
+        const txType = String(doc.type || '').toLowerCase();
+        
+        if (txType.includes('deposit') || txType.includes('واریز')) {
+          // Deposit request submitted
+          await sendSmsToUser('depositRequest', doc, user);
+        } else if (txType.includes('withdraw') || txType.includes('برداشت')) {
+          // Withdrawal request submitted
+          await sendSmsToUser('withdrawRequest', doc, user);
+        }
+        
+        saveToken('tx', txStream.resumeToken);
+        return;
+      }
 
-      const subject = ev.operationType === 'insert'
-        ? `New BalanceTx — ${doc.type || ''} ${doc.amount || ''}`
-        : `BalanceTx status → ${doc.status || ''} — ${doc.type || ''} ${doc.amount || ''}`;
+      // Handle balance transaction updates (status changes)
+      if (ev.operationType === 'update') {
+        const statusChanged = Object.prototype.hasOwnProperty.call(updated, 'status');
+        if (!statusChanged) return;
 
-      await sendEmail(subject, doc, user); // Send email with both transaction and user details
-      await sendSms('balanceTx', doc, user);
-      saveToken('tx', txStream.resumeToken);
+        const subject = `BalanceTx status → ${doc.status || ''} — ${doc.type || ''} ${doc.amount || ''}`;
+        await sendEmail(subject, doc, user);
+        await sendSms('balanceTx', doc, user);
+
+        // Re-fetch user to get updated balance
+        const updatedUser = await collUsers.findOne({ _id: doc.user });
+        
+        // Send SMS to user based on status and type
+        const txType = String(doc.type || '').toLowerCase();
+        const txStatus = String(doc.status || '').toLowerCase();
+        
+        // Deposit approved
+        if ((txType.includes('deposit') || txType.includes('واریز')) && 
+            (txStatus === 'accepted' || txStatus === 'approved' || txStatus === 'confirmed')) {
+          await sendSmsToUser('depositApproved', doc, updatedUser);
+        }
+        
+        // Deposit rejected
+        if ((txType.includes('deposit') || txType.includes('واریز')) && 
+            (txStatus === 'rejected' || txStatus === 'declined')) {
+          await sendSmsToUser('depositRejected', doc, updatedUser);
+        }
+        
+        // Withdrawal approved
+        if ((txType.includes('withdraw') || txType.includes('برداشت')) && 
+            (txStatus === 'accepted' || txStatus === 'approved' || txStatus === 'confirmed')) {
+          await sendSmsToUser('withdrawApproved', doc, updatedUser);
+        }
+
+        saveToken('tx', txStream.resumeToken);
+      }
     });
 
     txStream.on('error', (err) => {
@@ -439,22 +827,66 @@ async function main() {
     usersStream = collUsers.watch(pipelineUsers, opts);
 
     usersStream.on('change', async (ev) => {
-      if (ev.operationType !== 'insert') return;
       const doc = ev.fullDocument || {};
-      const user = await collUsers.findOne({ _id: doc._id });
+      const updated = ev.updateDescription?.updatedFields || {};
+      
+      // Handle new user registration
+      if (ev.operationType === 'insert') {
+        const user = await collUsers.findOne({ _id: doc._id });
 
-      const subject = `New User — ${doc.firstName || ''} ${doc.lastName || ''} (${doc.mobileNumber || ''})`;
-      const body = [
-        `Name: ${doc.firstName || ''} ${doc.lastName || ''}`,
-        `Mobile: ${doc.mobileNumber || '-'}`,
-        `Role: ${doc.role || '-'}`,
-        `VerificationStatus: ${doc.verificationStatus || '-'}`,
-        `CreatedAt: ${doc.createdAt || '-'}`,
-        `_id: ${doc._id}`,
-      ].join('\n');
+        const subject = `New User — ${doc.firstName || ''} ${doc.lastName || ''} (${doc.mobileNumber || ''})`;
+        const body = [
+          `Name: ${doc.firstName || ''} ${doc.lastName || ''}`,
+          `Mobile: ${doc.mobileNumber || '-'}`,
+          `Role: ${doc.role || '-'}`,
+          `VerificationStatus: ${doc.verificationStatus || '-'}`,
+          `CreatedAt: ${doc.createdAt || '-'}`,
+          `_id: ${doc._id}`,
+        ].join('\n');
 
-      await sendEmail(subject, body, user); // Send email with user details
-      saveToken('users', usersStream.resumeToken);
+        await sendEmail(subject, body, user);
+        
+        // Don't send welcome SMS here - wait for OTP verification
+        
+        saveToken('users', usersStream.resumeToken);
+        return;
+      }
+
+      // Handle user updates (OTP verification, KYC status changes, password changes)
+      if (ev.operationType === 'update') {
+        const user = await collUsers.findOne({ _id: doc._id });
+        
+        // Check if user just verified their mobile number (OTP confirmed)
+        // This happens when verificationCode is cleared after successful OTP entry
+        if (Object.prototype.hasOwnProperty.call(updated, 'verificationCode') && 
+            (updated.verificationCode === null || updated.verificationCode === undefined || updated.verificationCode === '')) {
+          // User successfully verified OTP - send welcome SMS
+          await sendSmsToUser('userRegistration', doc, user);
+        }
+        
+        // Check for verification status changes
+        if (Object.prototype.hasOwnProperty.call(updated, 'verificationStatus')) {
+          const newStatus = updated.verificationStatus;
+          const oldStatus = doc.verificationStatus;
+          
+          // KYC Approved (FirstLevelVerified or SecondLevelVerified)
+          if (newStatus === 'FirstLevelVerified' || newStatus === 'SecondLevelVerified') {
+            await sendSmsToUser('kycApproved', doc, user);
+          }
+          
+          // KYC Rejected
+          if (newStatus === 'FirstLevelRejected' || newStatus === 'SecondLevelRejected') {
+            await sendSmsToUser('kycRejected', doc, user);
+          }
+        }
+        
+        // Check for password change
+        if (Object.prototype.hasOwnProperty.call(updated, 'password')) {
+          await sendSmsToUser('passwordChanged', doc, user);
+        }
+        
+        saveToken('users', usersStream.resumeToken);
+      }
     });
 
     usersStream.on('error', (err) => {
@@ -476,27 +908,72 @@ async function main() {
     transactionsStream.on('change', async (ev) => {
       const doc = ev.fullDocument || {};
       const updated = ev.updateDescription?.updatedFields || {};
-      const statusChanged = Object.prototype.hasOwnProperty.call(updated, 'status');
-      if (ev.operationType === 'update' && !statusChanged) return;
+      
+      // Handle new transaction
+      if (ev.operationType === 'insert') {
+        const user = await collUsers.findOne({ _id: doc.user });
+        
+        // Fetch tradeable info
+        const collTradeables = db.collection('tradeables');
+        const tradeable = doc.tradeable ? await collTradeables.findOne({ _id: doc.tradeable }) : null;
+        const tradeableName = tradeable ? (tradeable.name || tradeable.symbol || 'Unknown') : '-';
 
-      const user = await collUsers.findOne({ _id: doc.user }); // Fetch user info
-      
-      // Fetch tradeable info
-      const collTradeables = db.collection('tradeables');
-      const tradeable = doc.tradeable ? await collTradeables.findOne({ _id: doc.tradeable }) : null;
-      const tradeableName = tradeable ? (tradeable.name || tradeable.symbol || 'Unknown') : '-';
+        const subject = `New Transaction — ${doc.type || ''} ${doc.amount || ''} ${tradeableName} (${doc.status || ''})`;
+        
+        // Create custom doc with tradeable name
+        const enrichedDoc = {
+          ...doc,
+          tradeableName: tradeableName,
+        };
+        
+        await sendEmail(subject, enrichedDoc, user);
+        await sendSms('transaction', enrichedDoc, user);
+        
+        saveToken('transactions', transactionsStream.resumeToken);
+        return;
+      }
 
-      const subject = `New Transaction — ${doc.type || ''} ${doc.amount || ''} ${tradeableName} (${doc.status || ''})`;
-      
-      // Create custom doc with tradeable name
-      const enrichedDoc = {
-        ...doc,
-        tradeableName: tradeableName,
-      };
-      
-      await sendEmail(subject, enrichedDoc, user); // Send email with transaction, user and tradeable details
-      await sendSms('transaction', enrichedDoc, user);
-      saveToken('transactions', transactionsStream.resumeToken);
+      // Handle transaction updates (status changes)
+      if (ev.operationType === 'update') {
+        const statusChanged = Object.prototype.hasOwnProperty.call(updated, 'status');
+        if (!statusChanged) return;
+
+        const user = await collUsers.findOne({ _id: doc.user });
+        
+        // Fetch tradeable info
+        const collTradeables = db.collection('tradeables');
+        const tradeable = doc.tradeable ? await collTradeables.findOne({ _id: doc.tradeable }) : null;
+        const tradeableName = tradeable ? (tradeable.name || tradeable.symbol || 'Unknown') : '-';
+
+        const subject = `Transaction status → ${doc.status || ''} — ${doc.type || ''} ${doc.amount || ''} ${tradeableName}`;
+        
+        // Create custom doc with tradeable name
+        const enrichedDoc = {
+          ...doc,
+          tradeableName: tradeableName,
+        };
+        
+        await sendEmail(subject, enrichedDoc, user);
+        await sendSms('transaction', enrichedDoc, user);
+
+        // Re-fetch user to get updated balances
+        const updatedUser = await collUsers.findOne({ _id: doc.user });
+        
+        // Send SMS to user based on transaction type and status
+        const txType = String(doc.type || '').toLowerCase();
+        const txStatus = String(doc.status || '').toLowerCase();
+        
+        // Only send SMS for successful transactions
+        if (txStatus === 'accepted' || txStatus === 'approved' || txStatus === 'confirmed' || txStatus === 'successful') {
+          if (txType === 'buy' || txType === 'purchase') {
+            await sendSmsToUser('buyTransaction', enrichedDoc, updatedUser);
+          } else if (txType === 'sell') {
+            await sendSmsToUser('sellTransaction', enrichedDoc, updatedUser);
+          }
+        }
+
+        saveToken('transactions', transactionsStream.resumeToken);
+      }
     });
 
     transactionsStream.on('error', (err) => {

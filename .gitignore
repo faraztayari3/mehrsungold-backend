@@ -30,3 +30,10 @@ coverage/
 
 # PM2
 .pm2/
+
+# bt-mailer runtime state (do not commit)
+bt-mailer/resume-token-*.json
+
+# Local artifacts
+.tmp/
+*.bak
