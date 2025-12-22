@@ -115,8 +115,8 @@ function canSendLiveNow() {
 }
 
 function userName(user) {
-  const name = `${user?.firstName || ''} ${user?.lastName || ''}`.trim();
-  return name || 'نام کاربر';
+  const firstName = String(user?.firstName || '').trim();
+  return firstName || 'کاربر';
 }
 
 function formatJalaliDateTimeParts(value) {
@@ -145,11 +145,11 @@ function formatJalaliDateTimeParts(value) {
 
 function buildUserSms(kind, doc, user) {
   const name = userName(user);
+  const greeting = name === 'کاربر' ? 'کاربر عزیز' : `${name} عزیز`;
 
   if (kind === 'userRegistration') {
     return [
-      `${name} عزیز`,
-      '',
+      greeting,
       'پیش ثبت نام شما با موفقیت انجام شد.',
       'جهت تکمیل ثبت نام مراحل احراز هویت را کامل نمایید.',
       'پشتیبانی:07644421176',
@@ -158,7 +158,7 @@ function buildUserSms(kind, doc, user) {
 
   if (kind === 'kycApproved') {
     return [
-      `${name} عزیز`,
+      greeting,
       'احراز هویت شما در مهرسان گلد با موفقیت تأیید شد.',
       'اکنون میتوانید از تمام خدمات سامانه استفاده کنید.',
     ].join('\n');
@@ -167,7 +167,7 @@ function buildUserSms(kind, doc, user) {
   if (kind === 'kycRejected') {
     const rejectReason = (doc && (doc.verifyDescription || doc.confirmDescription)) || 'نامشخص';
     return [
-      `${name} عزیز`,
+      greeting,
       'احراز هویت شما در مهرسان گلد تأیید نشد.',
       `دلیل: ${rejectReason}`,
       'لطفاً اطلاعات خود را اصلاح و مجدداً ارسال کنید.',
@@ -175,7 +175,7 @@ function buildUserSms(kind, doc, user) {
   }
 
   if (kind === 'passwordChanged') {
-    return [`${name} عزیز`, 'رمز عبور حساب شما در مهرسان گلد با موفقیت تغییر کرد.'].join('\n');
+    return [greeting, 'رمز عبور حساب شما در مهرسان گلد با موفقیت تغییر کرد.'].join('\n');
   }
 
   if (kind === 'depositRequest') {

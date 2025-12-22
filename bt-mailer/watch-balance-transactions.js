@@ -278,13 +278,13 @@ function statusPhrase(status) {
 function buildSmsTextForUser(kind, doc, user) {
   if (!doc || typeof doc !== 'object' || !user) return null;
 
-  const userName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'نام کاربر';
+  const firstName = String(user.firstName || '').trim();
+  const greeting = firstName ? `${firstName} عزیز` : 'کاربر عزیز';
 
   // 1- Welcome message after OTP verification
   if (kind === 'userRegistration') {
     return [
-      `${userName} عزیز`,
-      '',
+      greeting,
       'پیش ثبت‌نام شما با موفقیت انجام شد.',
       'جهت تکمیل ثبت نام مراحل احراز هویت را کامل نمایید.',
       'پشتیبانی:07644421176'
@@ -294,7 +294,7 @@ function buildSmsTextForUser(kind, doc, user) {
   // 2- KYC Approved
   if (kind === 'kycApproved') {
     return [
-      `${userName} عزیز`,
+      greeting,
       'احراز هویت شما در مهرسان گلد با موفقیت تأیید شد.',
       'اکنون می‌توانید از تمام خدمات سامانه استفاده کنید.'
     ].join('\n');
@@ -304,7 +304,7 @@ function buildSmsTextForUser(kind, doc, user) {
   if (kind === 'kycRejected') {
     const rejectReason = doc.verifyDescription || 'نامشخص';
     return [
-      `${userName} عزیز`,
+      greeting,
       'احراز هویت شما در مهرسان گلد تأیید نشد.',
       `دلیل: ${rejectReason}`,
       'لطفاً اطلاعات خود را اصلاح و مجدداً ارسال کنید.'
@@ -314,7 +314,7 @@ function buildSmsTextForUser(kind, doc, user) {
   // 4- KYC Incomplete Reminder
   if (kind === 'kycReminder') {
     return [
-      `${userName} عزیز`,
+      greeting,
       'احراز هویت شما در مهرسان گلد هنوز تکمیل نشده است.',
       'برای فعال‌سازی کامل حساب و دریافت هدیه 5میلی طلا ، لطفاً مراحل احراز هویت را انجام دهید.'
     ].join('\n');
@@ -323,7 +323,7 @@ function buildSmsTextForUser(kind, doc, user) {
   // 5- Password Changed
   if (kind === 'passwordChanged') {
     return [
-      `${userName} عزیز`,
+      greeting,
       'رمز عبور حساب شما در مهرسان گلد با موفقیت تغییر کرد.'
     ].join('\n');
   }
