@@ -76,6 +76,10 @@ const SMS_ALLOWLIST = splitCsv(getEnv('SMS_ALLOWLIST', '')).map(normalizeDigitsT
 const SMS_MAX_PER_MINUTE = Number(getEnv('SMS_MAX_PER_MINUTE', '0')) || 0;
 const smsSendTimestamps = [];
 
+// If true, do NOT resume from stored change-stream tokens (prevents sending "old" events after downtime).
+// Useful for initial production rollout/testing.
+const WATCH_START_FRESH = parseBool(getEnv('WATCH_START_FRESH'), false);
+
 function isProductionEnv() {
   return String(getEnv('NODE_ENV', '')).trim().toLowerCase() === 'production';
 }
@@ -741,7 +745,7 @@ async function main() {
   // Stream for balance transactions
   const startTxStream = () => {
     txStream?.close();
-    const resume = loadToken('tx');
+    const resume = WATCH_START_FRESH ? undefined : loadToken('tx');
     const opts = { fullDocument: 'updateLookup', ...(resume ? { startAfter: resume } : {}) };
     txStream = collTx.watch(pipelineTx, opts);
 
@@ -822,7 +826,7 @@ async function main() {
   // Stream for users
   const startUsersStream = () => {
     usersStream?.close();
-    const resume = loadToken('users');
+    const resume = WATCH_START_FRESH ? undefined : loadToken('users');
     const opts = { fullDocument: 'updateLookup', ...(resume ? { startAfter: resume } : {}) };
     usersStream = collUsers.watch(pipelineUsers, opts);
 
@@ -901,7 +905,7 @@ async function main() {
   // Stream for transactions
   const startTransactionsStream = () => {
     transactionsStream?.close();
-    const resume = loadToken('transactions');
+    const resume = WATCH_START_FRESH ? undefined : loadToken('transactions');
     const opts = { fullDocument: 'updateLookup', ...(resume ? { startAfter: resume } : {}) };
     transactionsStream = collTransactions.watch(pipelineTransactions, opts);
 
@@ -986,6 +990,12 @@ async function main() {
   };
 
   // start all streams
+  if (WATCH_START_FRESH) {
+    wipeToken('tx');
+    wipeToken('users');
+    wipeToken('transactions');
+    console.log('bt-mailer: WATCH_START_FRESH enabled (ignoring resume tokens)');
+  }
   startTxStream();
   startUsersStream();
   startTransactionsStream();
