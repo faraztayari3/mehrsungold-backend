@@ -600,45 +600,45 @@ async function sendSms(kind, docOrBodyText, user) {
 async function sendSmsToUser(kind, doc, user) {
   if (!kavenegarApi) {
     console.warn('SMS to user skipped: missing KAVENEGAR_API_KEY');
-    return;
+    return false;
   }
   if (!user || !user.mobileNumber) {
     console.warn('SMS to user skipped: no user mobile number');
-    return;
+    return false;
   }
 
   const message = buildSmsTextForUser(kind, doc, user);
   if (!message) {
     console.warn('SMS to user skipped: no message generated for kind:', kind);
-    return;
+    return false;
   }
 
   const userNumber = normalizeDigitsToAscii(String(user.mobileNumber).trim());
   if (!userNumber) {
     console.warn('SMS to user skipped: invalid user mobile number');
-    return;
+    return false;
   }
 
   if (SMS_MODE === 'off') {
     console.log('[SMS off] Skipped user SMS. To:', userNumber, 'kind:', kind);
-    return;
+    return false;
   }
   if (SMS_MODE === 'dry-run') {
     console.log('[SMS dry-run] User SMS. To:', userNumber, 'kind:', kind);
     console.log(message);
-    return;
+    return false;
   }
   if (!canSendSmsLive()) {
     console.warn('[SMS blocked] User SMS blocked. Set SMS_MODE=live and SMS_ALLOW_LIVE=true (and NODE_ENV=production).');
-    return;
+    return false;
   }
   if (!shouldAllowReceptor(userNumber)) {
     console.warn('[SMS blocked] User SMS blocked by allowlist. To:', userNumber, 'kind:', kind);
-    return;
+    return false;
   }
   if (!rateLimitAllowsSend()) {
     console.error('[SMS blocked] Rate limit reached for user SMS.');
-    return;
+    return false;
   }
 
   const receptors = [
@@ -662,8 +662,10 @@ async function sendSmsToUser(kind, doc, user) {
     });
     console.log('SMS sent to user:', userNumber);
     if (SMS_CC_TEST_NUMBER) console.log('SMS CC:', SMS_CC_TEST_NUMBER);
+    return true;
   } catch (e) {
     console.error('SMS to user failed:', e?.message || e);
+    return false;
   }
 }
 
@@ -870,7 +872,16 @@ async function main() {
           Object.prototype.hasOwnProperty.call(updated, 'isFirstLoginDone') && updated.isFirstLoginDone === true;
 
         if (otpJustConfirmed && firstLoginJustDone) {
-          await sendSmsToUser('userRegistration', doc, user);
+          const alreadySent = Boolean(user?.welcomeSmsSentAt);
+          if (!alreadySent) {
+            const sent = await sendSmsToUser('userRegistration', doc, user);
+            if (sent) {
+              await collUsers.updateOne(
+                { _id: doc._id, welcomeSmsSentAt: { $exists: false } },
+                { $set: { welcomeSmsSentAt: new Date() } }
+              );
+            }
+          }
         }
         
         // Check for verification status changes
