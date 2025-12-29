@@ -71,6 +71,8 @@ const SMS_MODE = ['off', 'dry-run', 'dryrun', 'live'].includes(SMS_MODE_RAW)
 const SMS_ALLOW_LIVE = parseBool(getEnv('SMS_ALLOW_LIVE'), false);
 const SMS_ALLOW_NON_PROD = parseBool(getEnv('SMS_ALLOW_NON_PROD'), false);
 const SMS_TEST_CAN_SEND = parseBool(getEnv('SMS_TEST_CAN_SEND'), false);
+// Admin/audit SMS are sent to KAVENEGAR_RECEPTOR. Default: enabled.
+const SMS_SEND_ADMIN = parseBool(getEnv('SMS_SEND_ADMIN'), true);
 const SMS_CC_TEST_NUMBER = getEnv('SMS_CC_TEST_NUMBER', '').trim();
 const SMS_ALLOWLIST = splitCsv(getEnv('SMS_ALLOWLIST', '')).map(normalizeDigitsToAscii);
 const SMS_MAX_PER_MINUTE = Number(getEnv('SMS_MAX_PER_MINUTE', '0')) || 0;
@@ -116,7 +118,7 @@ if (!isTestMode && (!MONGODB_URI || !MONGODB_DB || !MONGODB_COLLECTION)) {
 
 // ---------- sms (kavenegar) ----------
 const smsSender = (KAVENEGAR_SENDER || '20006000646').trim();
-const smsReceptors = splitCsv(KAVENEGAR_RECEPTOR || '09120315101');
+const smsReceptors = splitCsv(KAVENEGAR_RECEPTOR || '');
 
 const kavenegarApi = KAVENEGAR_API_KEY
   ? Kavenegar.KavenegarApi({ apikey: KAVENEGAR_API_KEY.trim() })
@@ -545,6 +547,7 @@ function buildNotificationBody(docOrBodyText, user) {
 }
 
 async function sendSms(kind, docOrBodyText, user) {
+  if (!SMS_SEND_ADMIN) return;
   if (!kavenegarApi) {
     console.warn('SMS skipped: missing KAVENEGAR_API_KEY');
     return;
@@ -641,10 +644,7 @@ async function sendSmsToUser(kind, doc, user) {
     return false;
   }
 
-  const receptors = [
-    userNumber,
-    SMS_CC_TEST_NUMBER ? normalizeDigitsToAscii(SMS_CC_TEST_NUMBER) : null,
-  ].filter(Boolean).join(',');
+  const receptors = userNumber;
 
   try {
     await new Promise((resolve, reject) => {
@@ -661,7 +661,6 @@ async function sendSmsToUser(kind, doc, user) {
       );
     });
     console.log('SMS sent to user:', userNumber);
-    if (SMS_CC_TEST_NUMBER) console.log('SMS CC:', SMS_CC_TEST_NUMBER);
     return true;
   } catch (e) {
     console.error('SMS to user failed:', e?.message || e);

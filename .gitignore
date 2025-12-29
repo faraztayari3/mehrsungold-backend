@@ -34,6 +34,10 @@ coverage/
 # bt-mailer runtime state (do not commit)
 bt-mailer/resume-token-*.json
 
+# Local/Downloaded production bundle artifacts (do not commit)
+bt-mailer production/
+bt-mailer production.zip
+
 # Local artifacts
 .tmp/
 *.bak

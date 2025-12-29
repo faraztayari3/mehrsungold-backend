@@ -24,3 +24,32 @@ Notes:
 - The project expects `DATABASE_URI` environment variable (name: `DATABASE_URI`).
 - If your DB is remote and blocks your IP, you may need VPN or allowlist.
 - Do not commit `.env` with credentials. Use GitHub Secrets for CI/deploy.
+
+## Remove a tradeable (e.g. USDT)
+
+The backend blocks deleting a tradeable if related `transactions` or `products` exist.
+
+1) Make sure `DATABASE_URI` is set in `.env`.
+2) Dry-run to see what’s blocking deletion:
+
+```bash
+npm run remove-tradeable-deps -- --symbol USDT
+```
+
+3) If the report is correct, delete dependent docs:
+
+```bash
+npm run remove-tradeable-deps -- --symbol USDT --apply
+```
+
+4) Now the Admin UI delete button should succeed for USDT.
+
+Optional:
+
+```bash
+# Also delete the tradeable document itself
+npm run remove-tradeable-deps -- --symbol USDT --apply --deleteTradeable
+
+# Broader scan across all collections (slower)
+npm run remove-tradeable-deps -- --symbol USDT --scanAll
+```
