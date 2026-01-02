@@ -9,6 +9,13 @@ cp .env.example .env
 # Edit DATABASE_URI and other secrets
 ```
 
+If you already have a production-like `.env` in this folder, prefer using `.env.local` for local overrides:
+```bash
+cd Back/mehrsungold-backend
+cp .env.local.example .env.local
+# Edit DATABASE_URI and other local-only values
+```
+
 2. Install dependencies and start server:
 ```bash
 nvm use 18 # if you use nvm
@@ -16,6 +23,9 @@ npm install
 npm run dev    # development (nodemon)
 # or
 npm start      # production style (node main.js)
+ 
+# or (starts API + SMS standalone in one process)
+npm run start:chabokan
 ```
 
 3. Default backend port: `PORT` in `.env` (example uses 3001).

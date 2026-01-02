@@ -6,9 +6,13 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "start": "node main-enhanced.js",
-    "dev": "nodemon --watch . --exec \"node main-enhanced.js\"",
-    "remove-tradeable-deps": "node scripts/remove-tradeable-deps.js"
+    "start": "node main-enhanced-patched.js",
+    "start:chabokan": "node start-chabokan.js",
+    "dev": "nodemon --watch . --exec \"node main-enhanced-patched.js\"",
+    "remove-tradeable-deps": "node scripts/remove-tradeable-deps.js",
+    "check-tradeable-price-adjustment-dto": "node scripts/check-tradeable-price-adjustment-dto.js",
+    "inspect-tradeable-price": "node scripts/inspect-tradeable-price.js",
+    "reset-gold-silver-price-adjustments": "node scripts/reset-gold-silver-price-adjustments.js"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

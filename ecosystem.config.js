@@ -2,12 +2,12 @@ module.exports = {
   apps: [
     {
       name: 'mehrsungold-backend',
-      script: './main.js',
+      script: './main-enhanced-patched.js',
       instances: 1,
       exec_mode: 'cluster',
       env: {
         NODE_ENV: 'production',
-        PORT: 3005
+        PORT: process.env.PORT || 4000
       },
       error_file: './logs/backend-error.log',
       out_file: './logs/backend-out.log',
@@ -24,7 +24,7 @@ module.exports = {
       exec_mode: 'fork',
       env: {
         NODE_ENV: 'production',
-        SMS_PORT: 3006
+        SMS_PORT: process.env.SMS_PORT || 3005
       },
       error_file: './logs/sms-error.log',
       out_file: './logs/sms-out.log',

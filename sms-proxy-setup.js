@@ -27,11 +27,16 @@ function setupSmsProxy(app) {
         }));
     };
 
+    // IMPORTANT: Express strips the mount path from req.url inside middlewares.
+    // We must forward the full originalUrl so that:
+    // - /settings/sms -> /settings/sms (not /)
+    // - /sms/send/bulk -> /sms/send/bulk (not /send/bulk)
     const makeProxy = (pathLabel) =>
         createProxyMiddleware({
             target,
             changeOrigin: true,
             xfwd: true,
+            pathRewrite: (_path, req) => req.originalUrl || req.url,
             on: {
                 proxyReq: (_proxyReq, req) => {
                     console.log('[SMS Proxy] Forwarding:', req.method, req.originalUrl || req.url, '->', target, pathLabel);

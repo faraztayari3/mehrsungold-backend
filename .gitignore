@@ -38,6 +38,9 @@ bt-mailer/resume-token-*.json
 bt-mailer production/
 bt-mailer production.zip
 
+# Local production file lists / env exports (do not commit)
+production file list/
+
 # Local artifacts
 .tmp/
 *.bak
